@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+
+{% include head.html %}
+
+<body>
+  {% include header.html %}
+
+
+  <div class="container fifty" style="max-width: 950px">
+    <div class="fixOverlayDiv">
+
+        <h1 align = "left">Mouse sci-ATAC-seq Atlas</h1>
+        <p class="lead" align = "left">An atlas of chromatin accessibility in mouse at single cell resolution.</p>
+
+    </div>
+
+
+    <div class="col-md-12">
+
+      <img src="images/mouse_atlas.png" alt="..." class="img-responsive centered">
+
+    <br>
+
+
+    <div class="text-center">
+    <p class="lead">
+      In our manuscript, we report single cell measurements of chromatin accessibility for 17 samples spanning 13 different tissues in 8-week old mice (<i>Mus. musculus</i>).
+    </p>
+
+<div class="hugespacer"></div>
+<div class="hugespacer"></div>
+
+    <div class="text-center">
+    <h2>Downloads</h2>
+    <p class="lead">We have made our primary and secondary data available for the research community along with extensive documentation.</p>
+    <p><a class="btn btn-default" href="{{ site.baseurl }}/data" role="button">Downloads &raquo;</a></p>
+    </div>
+
+    <div class="hugespacer"></div>
+    <div class="hugespacer"></div>
+
+
+
+    <div class="text-center">
+  <h2>Getting Started Tutorial</h2>
+  <p class="lead">Coming soon! We will provide basic tutorials on how to download primary and secondary data and how to do some basic analyses on these data.</p>
+    </div>
+
+<div class="hugespacer"></div>
+<div class="hugespacer"></div>
+
+    <div class="text-center">
+        <h2>What is sci-ATAC-seq?</h2>
+  <img src="images/sciatac.png" alt="..." class="img-responsive centered">
+        <p class="lead">To generate these data we have used a technique we developed called sci-ATAC-seq (<a href="http://science.sciencemag.org/content/348/6237/910.long"><i>Cusanovich et al.</i>, Science 2015</a>).</p>
+
+  <p class="lead">sci-ATAC-seq uses a paradigm called combinatorial indexing, where nucelic acids from cells are labeled with unique combinations of barcodes via multiple rounds of split-pool barcoding.</p>
+    </div>
+</div>
+
+
+  <div class="hugespacer"></div>
+  <div class="hugespacer"></div>
+
+
+  <div class="text-center">
+  <h2>Visualizations</h2>
+  <img src="images/ukbb_viz.png" alt="..." class="img-responsive centered">
+  <p class="lead">We have a few interactive visualization tools in progress to explore some of our results. Currently we have an interactive version of our figure on cell-type specific heritability enrichments for UKBB traits available as an example.</p>
+  <p><a class="btn btn-default" href="{{ site.baseurl }}/ukbb_visualization/" role="button">UKBB Example &raquo;</a></p>
+  </div>
+
+</div>
+
+{% include footer.html %}
+
+</body>
+
+</html>

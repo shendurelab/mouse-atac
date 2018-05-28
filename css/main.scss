@@ -1,0 +1,83 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+@charset "utf-8";
+
+/* path to glyphicons */
+$icon-font-path: "/node_modules/bootstrap-sass/assets/fonts/bootstrap/";
+
+/* custom variable */
+// $body-bg: red;
+
+@import "variables";
+@import "bootswatch";
+
+/* any style customization must be before the bootstrap import */
+@import "bootstrap";
+
+.jumbotron h1{
+    color: #fff;
+}
+
+.jumbotron p{
+    color: #fff;
+}
+
+
+.navbar .nav > li > a:hover {
+    color: #00ffff !important;
+}
+
+.navbar .nav > li > a:focus {
+    color: #FFF !important;
+}
+
+.navbar-inverse .navbar-brand:hover {
+    color: #00ffff
+    !important;
+}
+
+.fullscreen { width:100%; height: 100vh; }
+
+.hugespacer {
+  height: 50px;
+}
+.bigspacer {
+  height: 20px;
+}
+.spacer {
+  height: 10px;
+}
+.smallspacer {
+  height: 5px;
+}
+
+
+.fixOverlayDiv{
+    position: relative;
+    width:100%;
+    padding:0px;
+}
+.OverlayText{
+    top: 10%;
+    left: 12%;
+    position: relative;
+    width: 100%;
+}
+
+#subgrid1 {
+  line-height: 100px;
+}
+
+.centered {
+    margin: 0 auto;
+}
+
+@media screen and (max-width: 767px) {
+  .sidenav {
+    visibility: hidden;
+    clear: both;
+    float: left;
+    display: none;
+  }
+}

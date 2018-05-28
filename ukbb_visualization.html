@@ -1,0 +1,413 @@
+---
+layout: vanilla
+permalink: /ukbb_visualization/
+description: "Tutorials for Mouse Atlas."
+modified: 2018-01-13
+tags: [mouse, manual, vignette, atlas]
+---
+<!DOCTYPE html>
+<html lang= "{{ page.lang | default: site.lang | default: "en" }}">
+
+  {% include head.html %}
+
+  <!-- See here for how to use the TOC control:
+  https://afeld.github.io/bootstrap-toc/ -->
+  <body>
+    {% include header.html %}
+
+    <div class= "container">
+    <div class= "row">
+</div>
+</div>
+
+{% include footer.html %}
+<link rel="stylesheet" href="{{ site.baseurl }}/third_party/example-styles.css">
+
+     <style>
+      /* disable text selection */
+      svg *::selection {
+         background : transparent;
+      }
+
+      svg *::-moz-selection {
+         background:transparent;
+      }
+
+      svg *::-webkit-selection {
+         background:transparent;
+      }
+      rect.selection {
+        stroke          : #333;
+        stroke-dasharray: 4px;
+        stroke-opacity  : 0.5;
+        fill            : transparent;
+      }
+
+      rect.cell-border {
+        stroke: #eee;
+        stroke-width:0.3px;
+      }
+
+      rect.cell-selected {
+        stroke: rgb(51,102,153);
+        stroke-width:0.5px;
+      }
+
+      rect.cell-hover {
+        stroke: #F00;
+        stroke-width:1px;
+        cursor: pointer;
+      }
+
+      rect.qvalbar {
+        stroke-width: 1px;
+        stroke: #000;
+      }
+
+      .hover-category {
+        color: #F00;
+        font-size: 17px;
+      }
+
+      text.mono {
+        font-size: 9pt;
+        font-family: Consolas, courier;
+        fill: #aaa;
+      }
+
+      text.text-selected {
+        fill: #000;
+      }
+
+      text.text-highlight {
+        fill: #c00;
+        font-size: 10pt;
+      }
+
+      text.text-hover {
+        fill: #00C;
+        font-size: 10pt;
+        cursor: pointer;
+      }
+
+      #chart {
+        cursor: grab;
+        cursor: -moz-grab;
+        cursor: -webkit-grab;
+        border-right: 1px solid #d3d3d3;
+      }
+      #chart:active {
+        cursor: grabbing;
+        cursor: -moz-grabbing;
+        cursor: -webkit-grabbing;
+      }
+
+      .barplot-label {
+        color: #ccc;
+        font-weight: bold;
+      }
+
+      div.barchart-placeholder {
+        border: 2px solid #aaa;
+        background-color: #eee;
+      }
+
+      p.barchart-placeholder {
+        text-align: center;
+        vertical-align: middle;
+        line-height: 500px;
+        font-weight: bold;
+        color: #CCC;
+      }
+
+    </style>
+
+<script src="{{ site.baseurl }}/third_party/d3.v3.min.js"></script>
+<script src="{{ site.baseurl }}/node_modules/dragscroll/dragscroll.js" type="text/javascript"></script>
+<script src="{{ site.baseurl }}/third_party/d3.tip.v0.6.3.js"></script>
+
+<div id="chart" class="dragscroll" style='overflow:auto; width:900px; '></div>
+
+<div class='explanation' style='position:absolute; top: 200px; left: 940px; width: 300px'>
+    <p>Here we display enrichments in heritability from GWAS summary statistics from the UKBB within differentially accesible peaks from each cluster of cells.</p>
+    <ul>
+        <li><code>drag/scroll</code>: move heatmap &#8596;</li>
+        <li><code>hover</code>: see more details</li>
+        <li><code>click</code>: display ranked cell types</li>
+    </ul>
+</div>
+
+<!-- Note that the barchart is hidden to start with (display: none) and plot_bar is what makes it visible -->
+<div id="barchart" style='width:400px; position:absolute; top: 500px; left: 910px;'>
+ <h4>Ranked Associations</h4>
+ <small class="barplot-label">Click cell or column label to highlight</small>
+
+<!-- Inversely, this placeholder is visible to start and plot_bar removes it from DOM entirely -->
+ <div class='barchart-placeholder mono' style='height: 700px; width: 350px;'>
+    <p class='barchart-placeholder'>ranked association chart</p>
+ </div>
+</div>
+
+
+<script type="text/javascript">
+
+seq = function(N) {
+    var foo = [];
+
+    for (var i = 1; i <= N; i++) {
+       foo.push(i);
+    }
+    return foo;
+}
+
+
+d3.tsv("../visualization_data/ukbb.all_results.txt",
+
+function(error, rows) {
+        // Get rid of negative values and insignificant qvalues
+        rows.map(row => row.scaled_coefficient = parseFloat(row.scaled_coefficient))
+        rows.map(row => row.coefficient_qval = parseFloat(row.coefficient_qval))
+
+        // Make the cluster ID
+        rows.map(row => row.id = row.cell_label)
+
+
+    var margin = { top: 400, right: 10, bottom: 50, left: 300 },
+      cellSize=10;
+      legendElementWidth = cellSize*2.5,
+      color_bins = [0,1,2,3,4,5,6,7],
+      colorBuckets = color_bins.length,
+      colors = ["#FFF", "#440154FF", "#443A83FF", "#31688EFF", "#21908CFF", "#35B779FF", "#8FD744FF", "#FDE725FF"]
+      rowLabel = rows.map(row => row.id).filter((x, i, a) => a.indexOf(x) == i),
+      colLabel = rows.map(row => row.field_cleaned).filter((x, i, a) => a.indexOf(x) == i),
+      hcrow = seq(rowLabel.length),
+      hccol = seq(colLabel.length),
+      col_number=colLabel.length,
+      row_number=rowLabel.length,
+      width = cellSize*col_number,
+      height = cellSize*row_number,
+
+      rows.map(row => row.row = rowLabel.indexOf(row.id) + 1)
+      rows.map(row => row.col = colLabel.indexOf(row.field_cleaned) + 1)
+      rows.map(row => row.value = -Math.log10(parseFloat(row.coefficient_qval)))
+
+      // Process for heatmap plotting
+      var data = rows.filter(row => row.scaled_coefficient > 0)
+      data = rows.filter(row => row.coefficient_qval < 0.05)
+      data.map(row => row.value = (row.value > 7) ? 7 : row.value)
+
+
+
+  var colorScale = d3.scale.quantile()
+      .domain([ 0 , 3.5, 7])
+      .range(colors);
+
+  tip = d3.tip().attr('class', 'd3-tip').html(function(d) {
+    var display_qval = d.coefficient_qval
+    var display_h2 = parseFloat(d.h2).toFixed(3)
+
+    if (display_qval < 0.001) {
+      display_qval = display_qval.toExponential(3)
+    } else {
+      display_qval = display_qval.toFixed(3)
+    }
+
+    return "<p><small class='hover-category'>Trait: </small>" + d.field_cleaned + "</p>" +
+           "<p><small class='hover-category'>Cluster: </small>" + d.id + "</p>" +
+           "<p><small class='hover-category'>qval: </small>" +display_qval + "</p>" +
+           "<p><small class='hover-category'>h2: </small>" + display_h2 + "</p>";
+  });
+
+  var svg = d3.select("#chart").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+      .call(tip)
+
+  var rowLabels = svg.append("g")
+      .selectAll(".rowLabelg")
+      .data(rowLabel)
+      .enter()
+      .append("text")
+      .text(function (d) { return d; })
+      .attr("x", 0)
+      .attr("y", function (d, i) { return hcrow.indexOf(i+1) * cellSize; })
+      .style("text-anchor", "end")
+      .attr("transform", "translate(-6," + cellSize / 1.5 + ")")
+      .attr("class", function (d,i) { return "rowLabel mono r"+i;} )
+      .on("mouseover", function(d) {d3.select(this).classed("text-hover",true);})
+      .on("mouseout" , function(d) {d3.select(this).classed("text-hover",false);})
+      .on("click", function(d,i) { highlight_cells("r",i)})
+
+  var colLabels = svg.append("g")
+      .selectAll(".colLabelg")
+      .data(colLabel)
+      .enter()
+      .append("text")
+      .text(function (d) { return d; })
+      .attr("x", 0)
+      .attr("y", function (d, i) { return hccol.indexOf(i+1) * cellSize; })
+      .style("text-anchor", "left")
+      .attr("transform", "translate("+cellSize/2 + ",-6) rotate (-90)")
+      .attr("class",  function (d,i) { return "colLabel mono c"+i;} )
+      .on("mouseover", function(d) {d3.select(this).classed("text-hover",true);})
+      .on("mouseout" , function(d) {d3.select(this).classed("text-hover",false);})
+      .on("click", function(d,i) {
+        highlight_cells("c",i)
+        plot_bar(d)
+       })
+
+  var heatMap = svg.append("g").attr("class","g3")
+        .selectAll(".cellg")
+        .data(data,function(d){return d.row+":"+d.col;})
+        .enter()
+        .append("rect")
+        .attr("x", function(d) { return hccol.indexOf(d.col) * cellSize; })
+        .attr("y", function(d) { return hcrow.indexOf(d.row) * cellSize; })
+        .attr("class", function(d){return "cell cell-border cr"+(d.row-1)+" cc"+(d.col-1);})
+        .attr("width", cellSize)
+        .attr("height", cellSize)
+        .style("fill", function(d) { return colorScale(d.value); })
+        .on("mouseover", function(d){
+               //highlight text
+               d3.select(this).classed("cell-hover",true);
+               d3.selectAll(".rowLabel").classed("text-highlight",function(r,ri){ return ri==(d.row-1);});
+               d3.selectAll(".colLabel").classed("text-highlight",function(c,ci){ return ci==(d.col-1);});
+               tip.show(d)
+        })
+        .on("mouseout", function(d){
+               d3.select(this).classed("cell-hover",false);
+               d3.selectAll(".rowLabel").classed("text-highlight",false);
+               d3.selectAll(".colLabel").classed("text-highlight",false);
+               tip.hide(d);
+        })
+        .on('click', function(d) {
+            plot_bar(d.field_cleaned)
+        })
+
+  var legend = svg.selectAll(".legend")
+      .data(color_bins)
+      .enter().append("g")
+      .attr("class", "legend");
+
+  legend.append("rect")
+    .attr("x", function(d, i) { return legendElementWidth * i; })
+    .attr("y", height+(cellSize*2))
+    .attr("width", legendElementWidth)
+    .attr("height", cellSize)
+    .style("fill", function(d, i) { return colors[i]; });
+
+  legend.append("text")
+    .attr("class", "mono")
+    .text(function(d) { return d; })
+    .attr("width", legendElementWidth)
+    .attr("x", function(d, i) { return legendElementWidth * i; })
+    .attr("y", height + (cellSize*4));
+
+
+  // Barchart
+  var filtered_data = rows.filter(row => row.field_cleaned === 'Alcohol drinker status: Never (20117_0)')
+
+  var linearScale = d3.scale.linear()
+                               .domain([0,d3.max(filtered_data.map(row => -Math.log10(row.coefficient_qval)))])
+                               .range([0,50]);
+
+function compare(a, b) {
+  return a.coefficient_qval - b.coefficient_qval
+}
+
+  filtered_data.sort(compare)
+
+
+  var barLabel = filtered_data.map(row => row.id).filter((x, i, a) => a.indexOf(x) == i),
+     barRow = seq(barLabel.length)
+
+filtered_data.map(row => row.row = barLabel.indexOf(row.id) + 1)
+
+  var bar_margin = { top: 10, right: 10, bottom: 0, left: 290 }
+
+  var barsvg = d3.select("#barchart")
+      .append("svg")
+      .style('display', 'none')
+      .attr("width", 400)
+      .attr("height", height + bar_margin.top + bar_margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + bar_margin.left + "," + bar_margin.top + ")")
+
+  var barLabels = barsvg.append("g")
+      .selectAll(".barLabelg")
+      .data(barLabel)
+      .enter()
+      .append("text")
+
+  var barChart = barsvg.append("g").attr("class","g3")
+        .selectAll(".barcellg")
+        .data(filtered_data,function(d){return d.row})
+        .enter()
+        .append("rect")
+
+// Update the ranked barplot
+function plot_bar(trait) {
+    // Remove the placeholder (if present)
+    $('.barchart-placeholder').remove()
+
+    // Show the SVG for barchart
+    d3.select('#barchart svg').style('display', 'inline')
+
+    // Modify the text to show the selected trait
+    $('.barplot-label').text(trait)
+
+    // Now make the ranked plot for the selected trait
+    filtered_data = rows.filter(row => row.field_cleaned === trait)
+
+    linearScale = d3.scale.linear()
+                               .domain([0,d3.max(filtered_data.map(row => -Math.log10(row.coefficient_qval)))])
+                               .range([0,50]);
+
+  filtered_data.sort(compare)
+
+  var qvalues = {}
+  for (var i = 0; i < filtered_data.length; i++) {
+    qvalues[filtered_data[i].id] = filtered_data[i].coefficient_qval
+  }
+
+  barLabel = filtered_data.map(row => row.id).filter((x, i, a) => a.indexOf(x) == i)
+  barRow = seq(barLabel.length)
+
+  barLabels
+      .attr("class", "mono qvallabel")
+      .text(function (d) { return d; })
+      .attr("x", 0)
+      .attr("y", function (d) { return barLabel.indexOf(d) * cellSize; })
+      .style("text-anchor", "end")
+      .attr("transform", "translate(-6," + cellSize / 1.5 + ")")
+
+  barChart
+        .attr('class', 'qvalbar')
+        .attr("x", function(d) { return 0})
+        .attr("y", function(d) { return barLabel.indexOf(d.id) * cellSize; })
+        .attr('width', function(d) {return linearScale(-Math.log10(qvalues[d.id]))})
+        .attr("height", cellSize)
+        .style("fill", function(d) { return (qvalues[d.id] < 0.05) ? "#FF0000" : "#d3d3d3"; })
+
+}
+
+  function highlight_cells(rORc,i){
+
+       if(rORc=="r"){
+         heatMap.selectAll(".cell")
+           .classed('selection', function(d) { d.row == i})
+       }else{
+         heatMap.selectAll(".cell")
+           .classed('selection', function(d) { d.col == i})
+       }
+  }
+
+});
+</script>
+
+</body>
+
+</html>
+
