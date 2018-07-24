@@ -528,6 +528,87 @@ ed.mtx.gz" download>atac_matrix.tfidf.qc_filtered.mtx.gz</a></th>
               </table>
 
 
+<div class="hugespacer"></div>
+
+          <h2>Comparisons to scRNA-seq Datasets</h2>
+
+          <p>In our manuscript we also examine similarity between our sci-ATAC-seq dataset and several sc-RNA-seq datasets. We do this using a cluster-level correlation-based approach and a cell-by-cell KNN-based approach. Both used activity scores as calculated by Cicero as input (see above). Here we provide the cluster-level correlations for each dataset/tissue and the cell-by-cell KNN results for each dataset we have compared to.</p>
+
+            <table class = "table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Last modified</th>
+                  <th>Size</th>
+                  <th width = "50%">Description</th>
+                </tr>
+              </thead>
+              <tbody>
+
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/scrna_seq_comparisons/TODO" download>TODO</a></th>
+  <th>TODO date</th>
+  <th>TODOGB</th>
+  <th>KNN results listing assignments of each cell in our study in TSV format. Some cells will be missing and designated as "NA" due to the filtering of very low frequency cell type assignments within each tissue and thresholds on the number of non-zero peaks per cell as described in methods.
+    <a class="btn btn-info btn-xs" data-toggle="collapse" href="#knn-format" role="button" aria-expanded="false" aria-controls="knn-format">format details</a>
+                      <div class="collapse" id="knn-format">
+                        <ul>
+                          <li><code>cell</code>: cell barcode (combined and corrected)</li>
+                          <li><code>tissue</code>: the tissue in the cell type tissue pair</li>
+                          <li><code>cell_label</code>: assigned cell type in our study</li>
+                          <li><code>tabula_muris.label</code>: TODO Description.</li>
+                          <li><code>mca.label</code>: TODO Description.</li>
+                          <li><code>kidney.label</code>: TODO Description.</li>
+                        </ul>
+                      </div>
+    </th>
+</tr>
+
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/scrna_seq_comparisons/TODO" download>TODO</a></th>
+  <th>TODO date</th>
+  <th>TODOGB</th>
+  <th>Cluster-level Spearman correlations as a metric of similarity between each of our chromatin profiles and cell type assignments made in each of the same sc-RNA-seq studies in TSV format.
+    <a class="btn btn-info btn-xs" data-toggle="collapse" href="#correlation-scrnaseq-format" role="button" aria-expanded="false" aria-controls="correlation-scrnaseq-format">format details</a>
+                      <div class="collapse" id="correlation-scrnaseq-format">
+                        <ul>
+                          <li><code>id</code>: combined ID for major + iterative cluster assignment</li>
+                          <li><code>tissue</code>: the tissue in the cell type tissue pair</li>
+                          <li><code>cell_label</code>: assigned cell type in our study for the specified cluster</li>
+                          <li><code>scrna_seq_dataset</code>: The sc-RNA-seq study that we are comparing to. One of "tabula_muris", "mca", "kidney". (TODO fix)</li>
+                          <li><code>scrna_seq_label</code>: Label from sc-RNA-seq dataset.</li>
+                          <li><code>correlation</code>: Spearman correlation between the activity scores and expression values for genes with variable gene expression as described in manuscript.</li>
+                        </ul>
+                      </div>
+    </th>
+</tr>
+
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/scrna_seq_comparisons/TODO" download>TODO</a></th>
+  <th>TODO date</th>
+  <th>TODOGB</th>
+  <th>As described in our manuscript, to facilitate comparisons to the MCA dataset, we made minor modifications to the labels provided in this study. This file provides original labels used in the MCA paper and then the set of labels that we used in TSV format.
+    <a class="btn btn-info btn-xs" data-toggle="collapse" href="#mca-mapping-format" role="button" aria-expanded="false" aria-controls="mca-mapping-format">format details</a>
+                      <div class="collapse" id="mca-mapping-format">
+                        <ul>
+                          <li><code>mca_cell</code>: cell ID provided in the MCA dataset</li>
+                          <li><code>mca_label</code>: the original label for this cell provided in the MCA data release</li>
+                          <li><code>mca_label.modified</code>: the modified label that we used for comparisons in the manuscript</li>
+                        </ul>
+                      </div>
+    </th>
+</tr>
+
+
+                </tbody>
+              </table>
+
+
+
+
+
+
+
 
 <div class="hugespacer"></div>
 
