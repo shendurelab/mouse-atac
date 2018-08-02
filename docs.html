@@ -141,17 +141,26 @@ my_matrix = readRDS("my_matrix.rds")</code></pre>
 
 
     <h2>Dimensionality Reduction</h2>
-    <p>While our dimensionality reduction approach has been well documented (see documentation) and also used by other groups since, we provide some additional discussion of it here in the context of this dataset.</p>
+    <p>While our dimensionality reduction approach has been documented previously (<a href="http://atlas.gs.washington.edu/fly-atac/docs/#use-case-2-re-cluster-cells-with-t-sne">see documentation</a>) and also used by other groups since, we provide some additional discussion of it here in the context of this dataset and some sample code.</p>
 
-    <p>The input to all dimensionality reduction in the manuscript is the binarized count matrix that includes only qc filtered cells available in our downloads <a href="http://127.0.0.1:4000/mouse-atac/data/#atac-matrices">here</a> (<code>atac_matrix.binary.qc_filtered.rds</code> for RDS formatted version).</p>
+    <p>The input to all dimensionality reduction in our manuscript was the binarized count matrix that includes only qc filtered cells available in our downloads <a href="http://127.0.0.1:4000/mouse-atac/data/#atac-matrices">here</a> (<code>atac_matrix.binary.qc_filtered.rds</code> for RDS formatted version).</p>
 
-    <p>The subset of peaks that we used as input to TF-IDF are available in our downloads <a href="http://127.0.0.1:4000/mouse-atac/data/#atac-matrices">here</a> (<code>atac_matrix.tfidf.qc_filtered.peaks.txt</code>). The output of TF-IDF that we obtained using these sites and the cells in the binary matrix above is also available in our downloads <a href="http://127.0.0.1:4000/mouse-atac/data/#atac-matrices">here</a> (<code>atac_matrix.tfidf.qc_filtered.rds</code> for RDS formatted version).</p>
+    <p>The subset of peaks that we used as input to TFIDF are available in our downloads <a href="http://127.0.0.1:4000/mouse-atac/data/#atac-matrices">here</a> (<code>atac_matrix.tfidf.qc_filtered.peaks.txt</code>). The output of TFIDF that we obtained using these sites and the cells in the binary matrix above is also available in our downloads <a href="http://127.0.0.1:4000/mouse-atac/data/#atac-matrices">here</a> (<code>atac_matrix.tfidf.qc_filtered.rds</code> for RDS formatted version).</p>
 
-    <p>Note that this TF-IDF matrix, or subsets of it corresponding to particular clusters, tissues, etc. is used as input to all dimensionality reduction steps.</p>
+    <p>Note that this TFIDF matrix, or subsets of it corresponding to particular clusters, tissues, etc. is used as input to all dimensionality reduction steps.</p>
 
 
-    <p>TODO make a quick function that encapsulates running TSNE.</p>
+    <p>If not using our TFIDF output or our set of input peaks, we recommend choosing a set of peaks that is present in at least 1-3% of cells or so depending on the exact subset to avoid very lowly sampled peaks. We find that this in addition to avoiding inclusion of cells with very low reads per cell (based on the overall distribution) often improves results.</p>
 
+    <p>As a starting point, we also provide an example function on our Github page that given a matrix will do TFIDF, PCA, and t-SNE for you and return the resulting PCA and TSNE coordinates. Note that this function takes the binarized matrix and a <code>site_frequency_threshold</code> argument (default 0.03 or site observed in at least 3% of cells). Other arguments are hard-coded in the example but you may modify to suit your needs:</p>
+
+    <figure class="highlight">
+    <pre><code class="language-bash" data-lang="bash">source('dim_reduction/dim_reduction.R')
+binarized_matrix = readRDS('atac_matrix.binary.qc_filtered.rds')
+results.dim_reduction = atac_dim_reduction(binarized_matrix, site_frequency_threshold=0.02)</code></pre>
+    </figure>
+
+    <p>This function outputs a list with two items <code>pca_coords</code> and <code>tsne_coords</code>, which contain the PCA and t-SNE coordinates as dataframes where the cell IDs are included as the rownames.</p>
 
     <h2>Clustering</h2>
     <p>In our manuscript, we performed clustering in tSNE space using an older version of Seurat (Louvain clustering). We expect that many users might instead want to cluster in PCA space (although we expect the results to be broadly similar for this dataset) and use the most recent versions of Seurat, so provide an adapted approach here.</p>
