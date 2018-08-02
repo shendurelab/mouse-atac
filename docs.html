@@ -204,14 +204,24 @@ seurat_obj.tsne_clustering = FindClusters(seurat_obj, reduction.type='tsne', sav
 
     <p>LDSC already has extensive documentation provided on <a href="https://github.com/bulik/ldsc">Github</a> and their <a href="https://github.com/bulik/ldsc/wiki">wiki</a>. We take a set of peaks for each cell type and then run LDSC on set individually, annotating which SNPs used by LDSC fall in the cell type's peaks. One model is generated per cell type in this fashion and then used to calculate heritability enrichments for many phenotypes. In our case, we only annotate SNPs as falling in DA peaks if they lift over from the human genome to mouse, but this would be unncessary for human data.</p>
 
-    <p>As LDSC has been widely used outside of our study, we expect others will likely develop their own tools for generating LDSC models, etc. However, here we provide modified versions of scripts we used here to run LDSC. Note that we provide these mostly as a reference for your own analyses and we do not plan to support LDSC directly, which already has extensive documentation and user support.</p>
+    <p>As LDSC has been widely used outside of our study, we expect others will likely develop their own tools for generating LDSC models. However, here we provide modified versions of scripts we used to run LDSC internally. Note that we provide these mostly as a reference to see how we did things and toserve as an example for your own analyses -- we do not plan to support LDSC directly, which already has extensive documentation and user support.</p>
 
          <div class= "panel panel-warning">
             <div class= "panel-heading">
             <h3 class= "panel-title" data-toc-skip>Warning</h3>
             </div>
             <div class= "panel-body">
-        <p>We found that generating many LDSC models required us to parallelize the commands run in this script. Therefore, while the scripts here run commands serially, this may not be a tractable option in your case and some modifications may be required. LDSC authors may also be able to provide advice on generating many models.</p>
+        <p>We found that generating many LDSC models required us to parallelize. To simplify the script, we show it using serial execution, but this may not be a tractable option in your case and some modifications may be required. LDSC authors may also be able to provide advice on generating many models without requiring parallelization.</p>
+            </div>
+          </div>
+
+
+         <div class= "panel panel-info">
+            <div class= "panel-heading">
+            <h3 class= "panel-title" data-toc-skip>Requirements</h3>
+            </div>
+            <div class= "panel-body">
+        <p>There are a few requirements to use LDSC and these scripts specifically. LDSC must be installed (see <a href="https://github.com/bulik/ldsc">Github</a>) and you must have downloaded the requisite files required to use LDSC. Python 2 is required for LDSC. bedtools must be installed. You must be able to point to the path of the liftOver utility and a relevant chain file as described below.</p>
             </div>
           </div>
 
@@ -220,8 +230,10 @@ seurat_obj.tsne_clustering = FindClusters(seurat_obj, reduction.type='tsne', sav
     --output_directory outputs \
     --sample_sheet samplesheet.txt \
     --sumstats sumstats.txt \
-    --liftover_chain hg19ToMm9.over.chain.gz \
     --master_peaks all_peaks.bed \
+    --ldsc_path ldsc.py \
+    --lift_over_path liftOver \
+    --liftover_chain hg19ToMm9.over.chain.gz \
     --baseline_prefix ldsc/1000G_Phase3_baseline_v1.1/baseline. \
     --annot_template_prefix ldsc/1000G_Phase3_cell_type_groups/cell_type_group.1 \
     --bfile_prefix ldsc/1000G_EUR_Phase3_plink/1000G.EUR.QC \
@@ -230,7 +242,7 @@ seurat_obj.tsne_clustering = FindClusters(seurat_obj, reduction.type='tsne', sav
     --frqfile_prefix ldsc/1000G_Phase3_frq/1000G.EUR.QC</code></pre>
         </figure>
 
-<p>Note that this script relies on being in the same directory as the other scripts provided in the <code>ld_score_regression</code> folder on our Github. Documentation for the script arguments is provided below for reference:</p>
+<p>Note that this script relies on being in the same directory as the other scripts provided in the <code>ldscore_regression</code> folder on our Github. Documentation for the script arguments is provided below for reference:</p>
 
 <table class = "table">
   <thead>
@@ -253,12 +265,20 @@ seurat_obj.tsne_clustering = FindClusters(seurat_obj, reduction.type='tsne', sav
       <th>A TSV file with columns <code>phenotype</code> and <code>sumstats</code> that are a name for the phenotype and the path to a <code>.sumstats.gz</code> file respectively.</th>
     </tr>
     <tr>
+      <th><code>--master_peaks</code></th>
+      <th>A BED file with all peaks in the entire dataset vs. just the specific ones. Not really necessary at this point, but the script does require this argument.</th>
+    </tr>
+    <tr>
+      <th><code>--liftover_path</code></th>
+      <th>path to liftOver utility as downloaded from UCSC.</th>
+    </tr>
+    <tr>
       <th><code>--liftover_chain</code></th>
       <th>A liftover chain file such as <code>hg19ToMm9.over.chain.gz</code> or other chains available via <a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/liftOver/">UCSC</a>.</th>
     </tr>
     <tr>
-      <th><code>--master_peaks</code></th>
-      <th>A BED file with all peaks in the entire dataset vs. just the specific ones. Not really necessary at this point, but the script does require this argument.</th>
+      <th><code>--ldsc_path</code></th>
+      <th>path to ldsc.py from LD score regression installation.</th>
     </tr>
     <tr>
         <th><code>--score_sumstats_options</code></th>
@@ -291,7 +311,7 @@ seurat_obj.tsne_clustering = FindClusters(seurat_obj, reduction.type='tsne', sav
 </tbody>
 </table>
 
-<p>As written, the script would output several directories <code>make_template_files</code>, <code>train_models</code>, and <code>score_sumstats</code> that contain files that are inputs or outputs of LD score regression commands. It also contains a file <code>results_gathered.txt</code>, which contains various statistics aggregated from all LD score regression results. See LD score regression documentation for more information on reported statistics.</p>
+<p>As written, the script outputs several directories <code>make_template_files</code>, <code>train_models</code>, and <code>score_sumstats</code> that contain files that are inputs or outputs of LD score regression commands. It also contains a file <code>results_gathered.txt</code>, which contains various statistics aggregated from all LD score regression results. See LD score regression documentation for more information on reported statistics.</p>
 
 </div>
 </div>
