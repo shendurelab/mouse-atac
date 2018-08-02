@@ -24,7 +24,7 @@ tags: [worm, manual, vignette, atlas]
         <!-- main content area -->
         <div class= "col-sm-8">
 
-          <h2>Bulk Download</h2>
+<!--           <h2>Bulk Download</h2>
           <p>Files may be downloaded individually below or in a single compressed archive. Documentation for all files is provided in the sections below.</p>
 
           <a class="btn btn-primary" href="http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/mouse_atac_data_release.tar.gz" role="button"><b>Download All (mouse_atac_data_release.tar.gz; 37GB)</b></a>
@@ -36,12 +36,12 @@ tags: [worm, manual, vignette, atlas]
           <pre><code class="language-bash" data-lang="bash">tar -zxvf mouse_atac_data_release.tar.gz</code></pre>
 
 <div class="hugespacer"></div>
-
+ -->
           <h2>ATAC Matrices</h2>
 
-          <p>Similar to sc-RNA-seq, sci-ATAC-seq data is typically analyzed in sparse <code>peak</code> (row) by <code>cell (column)</code> matrices. The first set we provide are binarized counts. The second set has rare peaks filtered out and is then normalized with TFIDF to allow for input to  SVD/TSNE, for example. Note that only cells in our final QC filtered set are included.</p>
+          <p>Similar to sc-RNA-seq, sci-ATAC-seq data is typically analyzed in sparse <code>peak</code> (row) by <code>cell (column)</code> matrices. The first set we provide are binarized counts. The second set has rare peaks filtered out and is then normalized with TFIDF to allow for input to  PCA/TSNE, for example. Note that only cells in our final QC filtered set are included.</p>
 
-          <p>See <a href="{{ site.baseurl }}/docs/">tutorials</a> for examples of how to read these formats into <code>R</code> or <code>python</code></p>
+          <p>See <a href="{{ site.baseurl }}/docs/">tutorials</a> for examples of how to read these formats into <code>R</code> or <code>python</code> along with documentation on lots of other downstream analysis.</p>
 
           <div class= "panel panel-info">
             <div class= "panel-heading">
@@ -558,7 +558,7 @@ ed.mtx.gz" download>atac_matrix.tfidf.qc_filtered.mtx.gz</a></th>
                           <li><code>cell_label</code>: assigned cell type in our study</li>
                           <li><code>assigned_cell_label_microwell</code>: Label assigned from MCA dataset for applicable cells (Han et al.). See columns below for explanation of "NA" values.</li>
                           <li><code>assigned_cell_label_tm</code>: Label assigned from Tabula Muris Consortium dataset for applicable cells. See columns below for explanation of "NA" values.</li>
-                          <li><code>label_status_microwell</code>: In cases where labels assigned from microwell dataset are "NA" this column provides a reason why. NA values can be NA due to tissues not overlapping between the two datasets (not_compared), a cell not being included in a comparison due it not meeting our thresholds for number of non-zero sites (filtered_by_depth), or KNN neighbors not providing a clear majority label (TODO).</li>
+                          <li><code>label_status_microwell</code>: In cases where labels assigned from microwell dataset are "NA" this column provides a reason why. Entries with non-NA labels assigned with have "assigned" in this column. NA valuesin in the <code>assigned_cell_label_microwell</code> column can be NA due to tissues not overlapping between the two datasets (not_compared), a cell not being included in a comparison due it not meeting our thresholds for number of non-zero sites (filtered_by_depth), or KNN neighbors not providing a clear majority label (low_support).</li>
                           <li><code>label_status_tm</code>: same as label_status_microwell but referring to the assigned Tabula Muris label.</li>
                         </ul>
                       </div>
@@ -588,7 +588,7 @@ ed.mtx.gz" download>atac_matrix.tfidf.qc_filtered.mtx.gz</a></th>
   <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/scrna_seq_comparisons/microwell_truncated_labels.txt" download>microwell_truncated_labels.txt</a></th>
   <th>08/02/2018</th>
   <th>TODOGB</th>
-  <th>As described in our manuscript, to facilitate comparisons to the MCA dataset, we made minor modifications to the labels provided in this study. This file provides original labels used in the MCA paper and then the set of labels that we used in TSV format.
+  <th>As described in our manuscript, to facilitate comparisons to the MCA dataset, we made minor modifications to the labels provided in this study (see methods for details). This file provides original labels used in the MCA paper and then the set of labels that we used in TSV format.
     <a class="btn btn-info btn-xs" data-toggle="collapse" href="#mca-mapping-format" role="button" aria-expanded="false" aria-controls="mca-mapping-format">format details</a>
                       <div class="collapse" id="mca-mapping-format">
                         <ul>

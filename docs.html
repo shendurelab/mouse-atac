@@ -23,12 +23,16 @@ tags: [mouse, manual, vignette, atlas]
         </div>
         <!-- main content area -->
         <div class= "col-sm-8">
+
+    <h2>Data Availability and Github</h2>
+    <p>In several portions of this tutorial we may call out files on our <a href="/data/">downloads page</a>. Any R/python scripts referenced in this tutorial are available on our <a href="https://github.com/shendurelab/mouse-atac">Github page</a>.</p>
+
     <h2>Generating Peak by Cell Matrices</h2>
-    <p>Many of the initial steps of processing raw sci-ATAC-seq libraries used for this study are similar to our past efforts. Code and documentation on processing sequencing data can be found on github <a href="https://github.com/shendurelab/fly-atac">Github</a>. Documentation on various downstream steps can be found our <a href="http://atlas.gs.washington.edu/fly-atac/docs/#use-case-1-id-clades-with-lsi">Fly ATAC webpage</a>.</p>
+    <p>Many of the initial steps of processing raw sci-ATAC-seq libraries used for this study are similar to our past efforts. Code and documentation on processing sequencing data can be found on the <a href="https://github.com/shendurelab/fly-atac">Fly ATAC Github</a>. Documentation on various downstream steps can be found in our <a href="http://atlas.gs.washington.edu/fly-atac/docs/#use-case-1-id-clades-with-lsi">Fly ATAC documentation</a>.</p>
 
     <p>The above documentation should allow you to obtain a binarized matrix of peaks by cells for a given dataset. Alternatively, you can download the datasets we provide <a href='/data/'>on our downloads page</a> as a starting point for trying out some analyses.</p>
 
-    <p>Below we document some of the most important and generalizable methods used specifically on this dataset.</p>
+    <p>Below we document some of the most important and generalizable methods that are unique to this study.</p>
 
     <h2>Loading Matrix Files</h2>
     <p>Through our <a href='/data/'>downloads page</a> we provide two major formats for all matrix data, matrix-market and RDS.</p>
@@ -141,18 +145,18 @@ my_matrix = readRDS("my_matrix.rds")</code></pre>
 
 
     <h2>Dimensionality Reduction</h2>
-    <p>While our dimensionality reduction approach has been documented previously (<a href="http://atlas.gs.washington.edu/fly-atac/docs/#use-case-2-re-cluster-cells-with-t-sne">see documentation</a>) and also used by other groups since, we provide some additional discussion of it here in the context of this dataset and some sample code.</p>
+    <p>Our dimensionality reduction approach (commonly referred to in the literature as LSI) has been <a href="http://atlas.gs.washington.edu/fly-atac/docs/#use-case-2-re-cluster-cells-with-t-sne">documented previously</a> and also used by other groups. However, we provide some additional discussion of it here in the context of this dataset and provide some sample code.</p>
 
     <p>The input to all dimensionality reduction in our manuscript was the binarized count matrix that includes only qc filtered cells available in our downloads <a href="http://127.0.0.1:4000/mouse-atac/data/#atac-matrices">here</a> (<code>atac_matrix.binary.qc_filtered.rds</code> for RDS formatted version).</p>
 
     <p>The subset of peaks that we used as input to TFIDF are available in our downloads <a href="http://127.0.0.1:4000/mouse-atac/data/#atac-matrices">here</a> (<code>atac_matrix.tfidf.qc_filtered.peaks.txt</code>). The output of TFIDF that we obtained using these sites and the cells in the binary matrix above is also available in our downloads <a href="http://127.0.0.1:4000/mouse-atac/data/#atac-matrices">here</a> (<code>atac_matrix.tfidf.qc_filtered.rds</code> for RDS formatted version).</p>
 
-    <p>Note that this TFIDF matrix, or subsets of it corresponding to particular clusters, tissues, etc. is used as input to all dimensionality reduction steps.</p>
+    <p>Note that this TFIDF matrix, or subsets of it corresponding to particular clusters, tissues, etc. was used as input to all dimensionality reduction steps (different from the provided example code).</p>
 
 
-    <p>If not using our TFIDF output or our set of input peaks, we recommend choosing a set of peaks that is present in at least 1-3% of cells or so depending on the exact subset to avoid very lowly sampled peaks. We find that this in addition to avoiding inclusion of cells with very low reads per cell (based on the overall distribution) often improves results.</p>
+    <p>For datasets of your own, we recommend choosing a set of peaks that is present in at least 1-3% of cells or so depending on the exact subset to avoid very lowly sampled peaks. We find that this in addition to avoiding inclusion of cells with very low reads per cell (based on the overall distribution) often improves results.</p>
 
-    <p>As a starting point, we also provide an example function on our Github page that given a matrix will do TFIDF, PCA, and t-SNE for you and return the resulting PCA and TSNE coordinates. Note that this function takes the binarized matrix and a <code>site_frequency_threshold</code> argument (default 0.03 or site observed in at least 3% of cells). Other arguments are hard-coded in the example but you may modify to suit your needs:</p>
+    <p>As a starting point, we also provide an example function on our Github page that given a matrix will do TFIDF, PCA, and t-SNE for you and return the resulting PCA and TSNE coordinates. Note that this function takes the binarized matrix and a <code>site_frequency_threshold</code> argument (default 0.03 or site observed in at least 3% of cells). The code contains several hard-coded parameters as inputs to PCA and t-SNE in the example, but you may modify to suit your needs:</p>
 
     <figure class="highlight">
     <pre><code class="language-bash" data-lang="bash">source('dim_reduction/dim_reduction.R')
@@ -163,16 +167,16 @@ results.dim_reduction = atac_dim_reduction(binarized_matrix, site_frequency_thre
     <p>This function outputs a list with two items <code>pca_coords</code> and <code>tsne_coords</code>, which contain the PCA and t-SNE coordinates as dataframes where the cell IDs are included as the rownames.</p>
 
     <h2>Clustering</h2>
-    <p>In our manuscript, we performed clustering in tSNE space using an older version of Seurat (Louvain clustering). We expect that many users might instead want to cluster in PCA space (although we expect the results to be broadly similar for this dataset) and use the most recent versions of Seurat, so provide an adapted approach here.</p>
+    <p>In our manuscript, we performed clustering in t-SNE space using an older version of Seurat. We expect that many users might instead want to cluster in PCA space (although we expect the results to be broadly similar for this dataset) and use the most recent versions of Seurat, so provide an adapted approach here.</p>
 
-    <p>Below we show how to take PCA or tSNE coordinates and feed them into Seurat to perform Louvain clustering. Again, we imagine that this will become more streamlined once existing tools, such as Monocle, support ATAC-seq data.</p>
+    <p>Below we show how to take PCA or t-SNE coordinates and feed them into Seurat to perform Louvain clustering. Again, we imagine that this will become more streamlined once existing tools, such as Monocle, support ATAC-seq data.</p>
 
     <figure class="highlight">
     <pre><code class="language-r" data-lang="r">source('clustering/clustering.R')
 # We provide a utility function to take the results from the dimensionality reduction
 # performed above and put them in a Seurat object, although this code is simple
 # and you may modify it to suit your needs
-seurat_obj = make_seurat(binary_matrix, metadata=metadata, tsne_coords=reduce_dim_results$tsne_coords, svd_coords=reduce_dim_results$svd_coords)
+seurat_obj = make_seurat(binary_matrix, tsne_coords=results.dim_reduction$tsne_coords, pca_coords=results.dim_reduction$pca_coords)
 
 # You may then use Seurat as normal with desired parameters for clustering
 seurat_obj = FindClusters(seurat_obj, reduction.type='pca', save.SNN=TRUE)
@@ -186,29 +190,28 @@ seurat_obj.tsne_clustering = FindClusters(seurat_obj, reduction.type='tsne', sav
     <p>For detailed documentation of Cicero and activity score calculations, we point you to the <a href="https://cole-trapnell-lab.github.io/cicero-release/">Cicero website</a>.</p>
 
     <h2>KNN-based scRNA-seq Integration</h2>
-    <p>In our manuscript we make comparisons between gene level scores derived from our data (activity scores) and gene expression measurements from several sc-RNA-seq studies. As mentioned above, you may calculate activity scores using Cicero, or alternatively, this aproach can take other gene by cell matrices as input. For example, we have used aggregate read counts around TSSs or aggregate binarized counts in peaks, or even binarized counts in peaks overlapping promoters as inputs with reasonable success as well.</p>
+    <p>In our manuscript we make comparisons between gene level scores derived from our data (activity scores) and gene expression measurements from several sc-RNA-seq studies. As mentioned above, you may calculate activity scores using Cicero, or alternatively, this aproach can take other gene by cell matrices as input. For example, we have used aggregate read counts in 25-50kb regions around TSSs, aggregate binarized counts in peaks around TSSs, or even binarized counts in peaks overlapping promoters as inputs with reasonable success as well.</p>
 
-    <p>We are in the process of wrapping up this functionality into an R package of its own, but this is still in progress. For the time being we have provided some example code on github (TODO).</p>
+    <p>We are in the process of wrapping up this functionality into an R package of its own. We may also have an example function available between now and when this package is made available.</p>
 
-    <figure class="highlight">
-    <pre><code class="language-r" data-lang="r">source('knn/knn.R')
-TODO</code></pre>
-    </figure>
+    <h2>Differentially Accessible and Specific Peaks </h2>
+    <p>In our study we calculate differential accessibility of peaks (see documentation on how this is done on our <a href="http://atlas.gs.washington.edu/fly-atac/docs/#use-case-3-differential-accessibility">Fly ATAC page</a>) against a random set of 2000 cells from the remainder of the dataset to make computation more feasible.</p>
 
+    <p>We also compute specificity scores in a manner very similar to how Monocle can for CellTypeHierarchies. We will post example code for calculating these scores shortly.</p>
 
     <h2>LD Score Regression</h2>
-    <p>In our manuscript we use a tool called LD score regression (LDSC) to compute enrichments for trait heritability within differentially accessibly peaks across different cell types.</p>
+    <p>In our manuscript we use a tool called LD score regression (LDSC) to compute enrichments for trait heritability within differentially accessible peaks across different cell types.</p>
 
-    <p>LDSC already has extensive documentation provided on <a href="https://github.com/bulik/ldsc">Github</a> and their <a href="https://github.com/bulik/ldsc/wiki">wiki</a>. In principle, all we are doing is taking a set of peaks for each cell type and then running LDSC on set individually, annotating which SNPs used by LDSC fall in the cell type's peaks. One model is generated per cell type in this fashion. In our case, we only annotate SNPs as falling in DA peaks should they lift over from the human genome to mouse, but this would be unncessary for human data.</p>
+    <p>LDSC already has extensive documentation provided on <a href="https://github.com/bulik/ldsc">Github</a> and their <a href="https://github.com/bulik/ldsc/wiki">wiki</a>. We take a set of peaks for each cell type and then run LDSC on set individually, annotating which SNPs used by LDSC fall in the cell type's peaks. One model is generated per cell type in this fashion and then used to calculate heritability enrichments for many phenotypes. In our case, we only annotate SNPs as falling in DA peaks if they lift over from the human genome to mouse, but this would be unncessary for human data.</p>
 
-    <p>As LDSC has been widely used outside of our study, we expect others will likely develop their own tools for generating LDSC models, etc. However, here we provide modified versions of scripts we used here to run LDSC Note that we provide these mostly as a reference for your own analyses and we do not plan to support LDSC directly, which already has extensive documentation and user support.</p>
+    <p>As LDSC has been widely used outside of our study, we expect others will likely develop their own tools for generating LDSC models, etc. However, here we provide modified versions of scripts we used here to run LDSC. Note that we provide these mostly as a reference for your own analyses and we do not plan to support LDSC directly, which already has extensive documentation and user support.</p>
 
          <div class= "panel panel-warning">
             <div class= "panel-heading">
             <h3 class= "panel-title" data-toc-skip>Warning</h3>
             </div>
             <div class= "panel-body">
-        <p>We found that generating many LDSC models required us to parallelize steps of this script. Therefore, while the scripts here run commands serially, this may not be a tractable option in your case and some modifications may be required. LDSC documentation may also provide tips on generating many models.</p>
+        <p>We found that generating many LDSC models required us to parallelize the commands run in this script. Therefore, while the scripts here run commands serially, this may not be a tractable option in your case and some modifications may be required. LDSC authors may also be able to provide advice on generating many models.</p>
             </div>
           </div>
 
@@ -227,7 +230,7 @@ TODO</code></pre>
     --frqfile_prefix ldsc/1000G_Phase3_frq/1000G.EUR.QC</code></pre>
         </figure>
 
-<p>Note that this script relies on being in the same directory as the other scripts provided in the <code>ld_score_regression</code> folder on our Github. Documentation for the script arguments are provided below for reference:</p>
+<p>Note that this script relies on being in the same directory as the other scripts provided in the <code>ld_score_regression</code> folder on our Github. Documentation for the script arguments is provided below for reference:</p>
 
 <table class = "table">
   <thead>
@@ -288,7 +291,7 @@ TODO</code></pre>
 </tbody>
 </table>
 
-<p>As written, the script would output several directories <code>make_template_files</code>, <code>train_models</code>, and <code>score_sumstats</code> that contain files that are inputs or outputs to LD score regression tools. It also contains a file <code>results_gathered.txt</code>, which contains various statistics aggregated from all LD score regression results. See LD score regression documentation for more information on reported statistics.</p>
+<p>As written, the script would output several directories <code>make_template_files</code>, <code>train_models</code>, and <code>score_sumstats</code> that contain files that are inputs or outputs of LD score regression commands. It also contains a file <code>results_gathered.txt</code>, which contains various statistics aggregated from all LD score regression results. See LD score regression documentation for more information on reported statistics.</p>
 
 </div>
 </div>
