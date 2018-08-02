@@ -2,7 +2,7 @@ library(Matrix)
 library(Rtsne)
 library(irlba)
 
-atac_tsne = function(atac_matrix, site_frequency_threshold=0.03) {
+atac_dim_reduction = function(atac_matrix, site_frequency_threshold=0.03) {
                num_cells_ncounted = Matrix::rowSums(atac_matrix)
                threshold = ncol(atac_matrix) * site_frequency_threshold
 
