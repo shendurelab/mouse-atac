@@ -163,10 +163,10 @@ ed.mtx.gz" download>atac_matrix.tfidf.qc_filtered.mtx.gz</a></th>
 
          <div class= "panel panel-warning">
             <div class= "panel-heading">
-            <h3 class= "panel-title" data-toc-skip>Important: Size Factors</h3>
+            <h3 class= "panel-title" data-toc-skip>Important: Size Factor Normalization</h3>
             </div>
             <div class= "panel-body">
-<p>Quantitative scores provided here are not yet normalized by size factors.</p>
+<p>Quantitative scores provided here are not normalized by size factors, so you may apply size factor normalization to these values if needed.</p>
             </div>
           </div>
 
@@ -546,8 +546,8 @@ ed.mtx.gz" download>atac_matrix.tfidf.qc_filtered.mtx.gz</a></th>
               <tbody>
 
 <tr>
-  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/scrna_seq_comparisons/TODO" download>TODO</a></th>
-  <th>TODO date</th>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/scrna_seq_comparisons/knn_results.txt" download>knn_results.txt</a></th>
+  <th>08/02/2018</th>
   <th>TODOGB</th>
   <th>KNN results listing assignments of each cell in our study in TSV format. Some cells will be missing and designated as "NA" due to the filtering of very low frequency cell type assignments within each tissue and thresholds on the number of non-zero peaks per cell as described in methods.
     <a class="btn btn-info btn-xs" data-toggle="collapse" href="#knn-format" role="button" aria-expanded="false" aria-controls="knn-format">format details</a>
@@ -556,17 +556,18 @@ ed.mtx.gz" download>atac_matrix.tfidf.qc_filtered.mtx.gz</a></th>
                           <li><code>cell</code>: cell barcode (combined and corrected)</li>
                           <li><code>tissue</code>: the tissue in the cell type tissue pair</li>
                           <li><code>cell_label</code>: assigned cell type in our study</li>
-                          <li><code>tabula_muris.label</code>: TODO Description.</li>
-                          <li><code>mca.label</code>: TODO Description.</li>
-                          <li><code>kidney.label</code>: TODO Description.</li>
+                          <li><code>assigned_cell_label_microwell</code>: Label assigned from MCA dataset for applicable cells (Han et al.). See columns below for explanation of "NA" values.</li>
+                          <li><code>assigned_cell_label_tm</code>: Label assigned from Tabula Muris Consortium dataset for applicable cells. See columns below for explanation of "NA" values.</li>
+                          <li><code>label_status_microwell</code>: In cases where labels assigned from microwell dataset are "NA" this column provides a reason why. NA values can be NA due to tissues not overlapping between the two datasets (not_compared), a cell not being included in a comparison due it not meeting our thresholds for number of non-zero sites (filtered_by_depth), or KNN neighbors not providing a clear majority label (TODO).</li>
+                          <li><code>label_status_tm</code>: same as label_status_microwell but referring to the assigned Tabula Muris label.</li>
                         </ul>
                       </div>
     </th>
 </tr>
 
 <tr>
-  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/scrna_seq_comparisons/TODO" download>TODO</a></th>
-  <th>TODO date</th>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/scrna_seq_comparisons/correlation_results.txt" download>correlation_results.txt</a></th>
+  <th>08/02/2018</th>
   <th>TODOGB</th>
   <th>Cluster-level Spearman correlations as a metric of similarity between each of our chromatin profiles and cell type assignments made in each of the same sc-RNA-seq studies in TSV format.
     <a class="btn btn-info btn-xs" data-toggle="collapse" href="#correlation-scrnaseq-format" role="button" aria-expanded="false" aria-controls="correlation-scrnaseq-format">format details</a>
@@ -575,8 +576,8 @@ ed.mtx.gz" download>atac_matrix.tfidf.qc_filtered.mtx.gz</a></th>
                           <li><code>id</code>: combined ID for major + iterative cluster assignment</li>
                           <li><code>tissue</code>: the tissue in the cell type tissue pair</li>
                           <li><code>cell_label</code>: assigned cell type in our study for the specified cluster</li>
-                          <li><code>scrna_seq_dataset</code>: The sc-RNA-seq study that we are comparing to. One of "tabula_muris", "mca", "kidney". (TODO fix)</li>
-                          <li><code>scrna_seq_label</code>: Label from sc-RNA-seq dataset.</li>
+                          <li><code>scrna_seq_dataset</code>: The sc-RNA-seq study used to compute the correlation. One of "tabula_muris" or "microwell".</li>
+                          <li><code>scrna_seq_label</code>: Label assigned from sc-RNA-seq dataset.</li>
                           <li><code>correlation</code>: Spearman correlation between the activity scores and expression values for genes with variable gene expression as described in manuscript.</li>
                         </ul>
                       </div>
@@ -584,14 +585,13 @@ ed.mtx.gz" download>atac_matrix.tfidf.qc_filtered.mtx.gz</a></th>
 </tr>
 
 <tr>
-  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/scrna_seq_comparisons/TODO" download>TODO</a></th>
-  <th>TODO date</th>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/scrna_seq_comparisons/microwell_truncated_labels.txt" download>microwell_truncated_labels.txt</a></th>
+  <th>08/02/2018</th>
   <th>TODOGB</th>
   <th>As described in our manuscript, to facilitate comparisons to the MCA dataset, we made minor modifications to the labels provided in this study. This file provides original labels used in the MCA paper and then the set of labels that we used in TSV format.
     <a class="btn btn-info btn-xs" data-toggle="collapse" href="#mca-mapping-format" role="button" aria-expanded="false" aria-controls="mca-mapping-format">format details</a>
                       <div class="collapse" id="mca-mapping-format">
                         <ul>
-                          <li><code>mca_cell</code>: cell ID provided in the MCA dataset</li>
                           <li><code>mca_label</code>: the original label for this cell provided in the MCA data release</li>
                           <li><code>mca_label.modified</code>: the modified label that we used for comparisons in the manuscript</li>
                         </ul>
@@ -614,7 +614,7 @@ ed.mtx.gz" download>atac_matrix.tfidf.qc_filtered.mtx.gz</a></th>
 
           <h2>Cicero Maps</h2>
 
-          <p>We have also run Cicero (<a href="https://www.biorxiv.org/content/early/2017/07/20/166066">Pliner <i>et al.</i></a>), which connects regulatory elements to their target genes using coaccessibility as a measure of connectedness, as measured by sci-ATAC-seq. We have generated Cicero maps for each cluster in the dataset. Maps and peak sets are combined into single files with columns to indicate the cluster and subset_cluster entries correspond to.</p>
+          <p>We have also run Cicero (<a href="https://cole-trapnell-lab.github.io/cicero-release/">Pliner <i>et al.</i></a>), which connects regulatory elements to their target genes using coaccessibility as a measure of connectedness, as measured by sci-ATAC-seq. We have generated Cicero maps for each cluster in the dataset. Maps and peak sets are combined into single files with columns to indicate the cluster and subset_cluster entries correspond to.</p>
 
             <table class = "table">
               <thead>

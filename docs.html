@@ -24,14 +24,15 @@ tags: [mouse, manual, vignette, atlas]
         <!-- main content area -->
         <div class= "col-sm-8">
     <h2>Generating Peak by Cell Matrices</h2>
-    <p>Many of the initial steps of our sci-ATAC-seq processing are the same or similar to other published documentation. Documentation on preprocessing of sci-ATAC-seq data can be found on <a href="https://github.com/shendurelab/fly-atac">Github</a>. Documentation on establishing initial clades of cells using windows across the genome (as generated using the approach on Github) can be found on the <a href="http://atlas.gs.washington.edu/fly-atac/docs/#use-case-1-id-clades-with-lsi">Fly ATAC webpage</a>.</p>
+    <p>Many of the initial steps of processing raw sci-ATAC-seq libraries used for this study are similar to our past efforts. Code and documentation on processing sequencing data can be found on github <a href="https://github.com/shendurelab/fly-atac">Github</a>. Documentation on various downstream steps can be found our <a href="http://atlas.gs.washington.edu/fly-atac/docs/#use-case-1-id-clades-with-lsi">Fly ATAC webpage</a>.</p>
 
-    <p>The above documentation should allow you to obtain a binarized matrix of peaks by cells for a given dataset. Alternatively, you can download the datasets we provide <a href='/data/'>on our downloads page</a> as a starting point.</p>
+    <p>The above documentation should allow you to obtain a binarized matrix of peaks by cells for a given dataset. Alternatively, you can download the datasets we provide <a href='/data/'>on our downloads page</a> as a starting point for trying out some analyses.</p>
 
-    <p>Below we document features that are new or different in the mouse atlas data processing and analysis.</p>
+    <p>Below we document some of the most important and generalizable methods used specifically on this dataset.</p>
 
     <h2>Loading Matrix Files</h2>
     <p>Through our <a href='/data/'>downloads page</a> we provide two major formats for all matrix data, matrix-market and RDS.</p>
+
     <h3>Matrix Market Format</h3>
     <p>Matrix market format is the format used by the <code>cellranger</code> pipeline from 10X genomics, which may be familiar to many of you. This format is simply a text file that allows reconstruction of a sparse matrix, along with the peak (or gene) and cell names that specify the row and column names of the matrix, respectively.</p>
 
@@ -61,7 +62,7 @@ cells = [row[0] for row in csv.reader(open("my_matrix.cells.txt"), delimiter="\t
 <p>In principle this text format is readable in many other languages as well, although all of our tutorials are written in <code>R</code>.</p>
 
     <h3>RDS Format</h3>
-    <p>We also provide these matrices in RDS format, which is easily readable in <code>R</code>, but has less cross-compatability with other languages. Row and column names are already associated with the matrix.</code></p>
+    <p>We also provide these matrices in RDS format, which is easily readable in <code>R</code>, but has less cross-compatability with other languages. Row and column names are already assigned within the matrix.</code></p>
 
     <figure class="highlight">
     <pre><code class="language-r" data-lang="r">library(Matrix)
@@ -69,18 +70,18 @@ my_matrix = readRDS("my_matrix.rds")</code></pre>
     </figure>
 
     <h2>Nucleosome Banding Scores</h2>
-    <p>One of the new quality control steps that we have used in this manuscript is scoring of invidual cells for evidence of a banded insert size distribution that would be indicative of a high-quality ATAC-seq library. We do this by first extracting an insert size distribution for each cell and then calculating a score using an FFT of this distribution.</p>
+    <p>One of the new quality control steps that we have used in this manuscript is scoring of individual cells for evidence of a banded insert size distribution that would be indicative of a high-quality ATAC-seq library. We do this by first extracting an insert size distribution for each cell and then calculating a score using an FFT of this distribution.</p>
 
          <div class= "panel panel-warning">
             <div class= "panel-heading">
             <h3 class= "panel-title" data-toc-skip>Performance</h3>
             </div>
             <div class= "panel-body">
-        <p>The current implementation of the scripts below is a proof of concept and could use further performance optimization to reduce runtimes.
+        <p>The current implementation of the scripts below is a proof of concept and could use further performance optimization to reduce runtimes for datasets with many cells.
 
         <p>As such, we recommend using a whitelist of cell barcodes to limit computations to non-background cells (cells that meet your reads per cell threshold and other quality control steps). This file, a text file with one cell barcode per line, can be provided with the <code>--barcodes</code> argument in both scripts below.</p>
 
-        <p>The main bottleneck currently seems to be the FFT step, which should be readily optimizable using alternative implementations in R or python.</p>
+        <p>One bottleneck may be the FFT step, which should be readily optimizable using alternative implementations in R or python.</p>
 
             </div>
           </div>
@@ -106,12 +107,6 @@ my_matrix = readRDS("my_matrix.rds")</code></pre>
     <h3>Generating Banding Scores</h3>
     Using <code>insert_sizes.txt</code> as input, you can then generate banding scores.
 
-    <figure class="highlight">
-    <pre><code class="language-bash" data-lang="bash">Rscript calculate_nucleosome_banding_scores.R insert_sizes.txt banding_scores.txt --barcodes mybarcodes.txt</code></pre>
-    </figure>
-
-    The output file in this case is <code>banding_scores.txt</code>, a TSV separated file with <code>cell</code> and <code>nucleosome_score</code> as columns. Lower scores indicate less banding. We recommend plotting a distribution of all scores and setting a cutoff. In our case there was an long left tail that could be used to establish a pass-fail threshold for inclusion in downstream analysis.
-
     <div class="spacer"></div>
 
          <div class= "panel panel-info">
@@ -123,6 +118,11 @@ my_matrix = readRDS("my_matrix.rds")</code></pre>
             </div>
           </div>
 
+    <figure class="highlight">
+    <pre><code class="language-bash" data-lang="bash">Rscript calculate_nucleosome_banding_scores.R insert_sizes.txt banding_scores.txt --barcodes mybarcodes.txt</code></pre>
+    </figure>
+
+    The output file in this case is <code>banding_scores.txt</code>, a TSV separated file with <code>cell</code> and <code>nucleosome_score</code> as columns. Lower scores indicate less apparent banding. We recommend plotting a distribution of all scores and setting a cutoff. In our case there was an long left tail that could be used to establish a pass-fail threshold for inclusion in downstream analysis.
 
     <h2>Monocle Support</h2>
          <div class= "panel panel-info">
@@ -130,9 +130,9 @@ my_matrix = readRDS("my_matrix.rds")</code></pre>
             <h3 class= "panel-title" data-toc-skip>Upcoming Integration</h3>
             </div>
             <div class= "panel-body">
-<p>When we started this project no existing tools (to our knowledge) supported both sc-RNA-seq data and sc-ATAC-seq data. sc-ATAC-seq data requires different preprocessing strategies before input into dimensionality reduction and differential accessibility testing. However, as many functions, clustering and dimensionality reduction approaches as examples, should not really have to change, we didn't make an toolkit exclusive to sc-ATAC-seq data.</p>
+<p>When we started this project no existing tools (to our knowledge) supported both sc-RNA-seq data and sc-ATAC-seq data. sc-ATAC-seq data requires different preprocessing strategies before input into downstream steps such as dimensionality reduction and differential accessibility testing. However, as many functions, such as clustering and dimensionality reduction algorithms themselves, should work for both datatypes, we didn't want to make an toolkit exclusive to sc-ATAC-seq data.</p>
 
-<p>Our sc-RNA-seq toolkit, <a>Monocle</a>, should fully support sc-ATAC-seq data by the end of the summer and we expect that other popular tools will eventually support it as well.</p>
+<p>We are aiming to add full support full support for sc-ATAC-seq data to our sc-RNA-seq toolkit, <a>Monocle</a>, by the end of the summer. We also expect that as sc-ATAC-seq becomes more widely used, other popular tools will come to support it as well.</p>
 
 <p>Therefore, while we provide tutorial code below as examples of useful code that mirrors what we have used in our manuscript, we hope that some of it, as well as much additional functionality, will be enabled by existing tools soon.</p>
             </div>
@@ -141,18 +141,22 @@ my_matrix = readRDS("my_matrix.rds")</code></pre>
 
 
     <h2>Dimensionality Reduction</h2>
-    While our dimensionality reduction approach (part of the LSI workflow we established) has been well documented here: <code>TODO</code>, there are a few details here that warrant some additional documentation.
+    <p>While our dimensionality reduction approach has been well documented (see documentation) and also used by other groups since, we provide some additional discussion of it here in the context of this dataset.</p>
 
-    The input to all dimensionality reduction in the manuscript is the binarized count matrix that includes only qc filtered cells.
+    <p>The input to all dimensionality reduction in the manuscript is the binarized count matrix that includes only qc filtered cells available in our downloads <a href="http://127.0.0.1:4000/mouse-atac/data/#atac-matrices">here</a> (<code>atac_matrix.binary.qc_filtered.rds</code> for RDS formatted version).</p>
 
-    TODO selecting peaks
-    TODO make a quick function that encapsulates running TSNE.
+    <p>The subset of peaks that we used as input to TF-IDF are available in our downloads <a href="http://127.0.0.1:4000/mouse-atac/data/#atac-matrices">here</a> (<code>atac_matrix.tfidf.qc_filtered.peaks.txt</code>). The output of TF-IDF that we obtained using these sites and the cells in the binary matrix above is also available in our downloads <a href="http://127.0.0.1:4000/mouse-atac/data/#atac-matrices">here</a> (<code>atac_matrix.tfidf.qc_filtered.rds</code> for RDS formatted version).</p>
+
+    <p>Note that this TF-IDF matrix, or subsets of it corresponding to particular clusters, tissues, etc. is used as input to all dimensionality reduction steps.</p>
+
+
+    <p>TODO make a quick function that encapsulates running TSNE.</p>
 
 
     <h2>Clustering</h2>
-    <p>In our manuscript, we performed clustering in tSNE space using an older version of Seurat (Louvain clustering). Seurat has since been updated in a way that breaks most of our original code. We also expect that many users might instead want to cluster in PCA space (although we expect the results to be broadly similar for this dataset).</p>
+    <p>In our manuscript, we performed clustering in tSNE space using an older version of Seurat (Louvain clustering). We expect that many users might instead want to cluster in PCA space (although we expect the results to be broadly similar for this dataset) and use the most recent versions of Seurat, so provide an adapted approach here.</p>
 
-    <p>Below we show how to take PCA or tSNE coordinates generated via the approach described above as input to clustering with Seurat. Again, we imagine that this will become more streamlined once existing tools support ATAC-seq data, as algorithms that operate on a reduced dimension dataset, such as clustering, should work the same regardless of the original datatype.</p>
+    <p>Below we show how to take PCA or tSNE coordinates and feed them into Seurat to perform Louvain clustering. Again, we imagine that this will become more streamlined once existing tools, such as Monocle, support ATAC-seq data.</p>
 
     <figure class="highlight">
     <pre><code class="language-r" data-lang="r">source('clustering/clustering.R')
@@ -161,21 +165,21 @@ my_matrix = readRDS("my_matrix.rds")</code></pre>
 # and you may modify it to suit your needs
 seurat_obj = make_seurat(binary_matrix, metadata=metadata, tsne_coords=reduce_dim_results$tsne_coords, svd_coords=reduce_dim_results$svd_coords)
 
-# You may then use Seurat clustering approaches as normal with desired parameters (see Seurat tutorials)
+# You may then use Seurat as normal with desired parameters for clustering
 seurat_obj = FindClusters(seurat_obj, reduction.type='pca', save.SNN=TRUE)
 seurat_obj.tsne_clustering = FindClusters(seurat_obj, reduction.type='tsne', save.SNN=TRUE)
 </code></pre>
     </figure>
 
     <h2>Cicero and Calculating Activity Scores</h2>
-    <p><a href="https://cole-trapnell-lab.github.io/cicero-release/">Cicero</a>, a tool used in various parts of our analyses, has now been published (TODO link to publication). In addition to outputing maps of coaccessibility, it can also calculate gene activity scores as presented in our manuscript.</p>
+    <p><a href="https://cole-trapnell-lab.github.io/cicero-release/">Cicero</a>, a tool used in various parts of our analyses is now available. In addition to outputting maps of coaccessibility, it can also calculate gene activity scores as presented in our manuscript (<a href="https://cole-trapnell-lab.github.io/cicero-release/docs/#cicero-gene-activity-scores">see documentation</a>). Please see the paper and documentation for detailed information on Cicero methods and how to start using the tool.</p>
 
     <p>For detailed documentation of Cicero and activity score calculations, we point you to the <a href="https://cole-trapnell-lab.github.io/cicero-release/">Cicero website</a>.</p>
 
     <h2>KNN-based scRNA-seq Integration</h2>
     <p>In our manuscript we make comparisons between gene level scores derived from our data (activity scores) and gene expression measurements from several sc-RNA-seq studies. As mentioned above, you may calculate activity scores using Cicero, or alternatively, this aproach can take other gene by cell matrices as input. For example, we have used aggregate read counts around TSSs or aggregate binarized counts in peaks, or even binarized counts in peaks overlapping promoters as inputs with reasonable success as well.</p>
 
-    <p>We are in the process of wrapping up this functionality into an R package, but this is still in progress. For the time being, we provide the file <code>TODO</code> with the function <code>TODO</code> that carries out the approach used in our manuscript.</p>
+    <p>We are in the process of wrapping up this functionality into an R package of its own, but this is still in progress. For the time being we have provided some example code on github (TODO).</p>
 
     <figure class="highlight">
     <pre><code class="language-r" data-lang="r">source('knn/knn.R')
@@ -184,11 +188,98 @@ TODO</code></pre>
 
 
     <h2>LD Score Regression</h2>
-    <p>LD Score Regression (LDSC) already has extensive documentation provided on <a href="https://github.com/bulik/ldsc">Github</a> and their <a href="https://github.com/bulik/ldsc/wiki">wiki</a>. In principle, all we are doing is taking a set of peaks for each cell type and then running LDSC on cell type individually, annotating which SNPs used by LDSC fall in the cell type's peaks. One model is generated per cell type in this fashion. In our case, we only annotate SNPs as falling in DA peaks should they lift over from the human genome to mouse, but this would be unncessary for human data.</p>
+    <p>In our manuscript we use a tool called LD score regression (LDSC) to compute enrichments for trait heritability within differentially accessibly peaks across different cell types.</p>
 
-    <p>As LDSC has been widely used outside of our study, we expect others will likely develop their own tools for generating LDSC models, etc. However, here we provide some documentation of scripts that we used to run LDSC. We hope this provides a useful starting point if you are unsure how to apply LDSC to your data, although we do not currently plan to support these scripts as their own independent tools.</p>
+    <p>LDSC already has extensive documentation provided on <a href="https://github.com/bulik/ldsc">Github</a> and their <a href="https://github.com/bulik/ldsc/wiki">wiki</a>. In principle, all we are doing is taking a set of peaks for each cell type and then running LDSC on set individually, annotating which SNPs used by LDSC fall in the cell type's peaks. One model is generated per cell type in this fashion. In our case, we only annotate SNPs as falling in DA peaks should they lift over from the human genome to mouse, but this would be unncessary for human data.</p>
 
+    <p>As LDSC has been widely used outside of our study, we expect others will likely develop their own tools for generating LDSC models, etc. However, here we provide modified versions of scripts we used here to run LDSC Note that we provide these mostly as a reference for your own analyses and we do not plan to support LDSC directly, which already has extensive documentation and user support.</p>
 
+         <div class= "panel panel-warning">
+            <div class= "panel-heading">
+            <h3 class= "panel-title" data-toc-skip>Warning</h3>
+            </div>
+            <div class= "panel-body">
+        <p>We found that generating many LDSC models required us to parallelize steps of this script. Therefore, while the scripts here run commands serially, this may not be a tractable option in your case and some modifications may be required. LDSC documentation may also provide tips on generating many models.</p>
+            </div>
+          </div>
+
+        <figure class="highlight">
+        <pre><code class="language-bash" data-lang="bash">python ldscore_regression/ldscore_peaks.py \
+    --output_directory outputs \
+    --sample_sheet samplesheet.txt \
+    --sumstats sumstats.txt \
+    --liftover_chain hg19ToMm9.over.chain.gz \
+    --master_peaks all_peaks.bed \
+    --baseline_prefix ldsc/1000G_Phase3_baseline_v1.1/baseline. \
+    --annot_template_prefix ldsc/1000G_Phase3_cell_type_groups/cell_type_group.1 \
+    --bfile_prefix ldsc/1000G_EUR_Phase3_plink/1000G.EUR.QC \
+    --hapmap_snps_prefix ldsc/hapmap3_snps/hm \
+    --ld_score_prefix ldsc/1000G_Phase3_weights_hm3_no_MHC/weights.hm3_noMHC \
+    --frqfile_prefix ldsc/1000G_Phase3_frq/1000G.EUR.QC</code></pre>
+        </figure>
+
+<p>Note that this script relies on being in the same directory as the other scripts provided in the <code>ld_score_regression</code> folder on our Github. Documentation for the script arguments are provided below for reference:</p>
+
+<table class = "table">
+  <thead>
+    <tr>
+      <th>Argument</th>
+      <th width = "60%">Description</th>
+    </tr>
+  </thead>
+<tbody>
+    <tr>
+      <th><code>--output_directory</code>: </th>
+      <th>Folder to output results to.</th>
+    </tr>
+    <tr>
+      <th><code>--sample_sheet</code></th>
+      <th>A TSV file with columns <code>sample_id</code> and <code>sites</code>, which are a name for a sample (say a cluster ID, for example) and a BED file with sites to use for enrichment testing (cell type differentially accessible peaks, for example).</th>
+    </tr>
+    <tr>
+      <th><code>--sumstats</code></th>
+      <th>A TSV file with columns <code>phenotype</code> and <code>sumstats</code> that are a name for the phenotype and the path to a <code>.sumstats.gz</code> file respectively.</th>
+    </tr>
+    <tr>
+      <th><code>--liftover_chain</code></th>
+      <th>A liftover chain file such as <code>hg19ToMm9.over.chain.gz</code> or other chains available via <a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/liftOver/">UCSC</a>.</th>
+    </tr>
+    <tr>
+      <th><code>--master_peaks</code></th>
+      <th>A BED file with all peaks in the entire dataset vs. just the specific ones. Not really necessary at this point, but the script does require this argument.</th>
+    </tr>
+    <tr>
+        <th><code>--score_sumstats_options</code></th>
+        <th>Optional string containing options for use with LDSC in scoring sumstats files. Must start with a space and be quoted. Example: " --chisq-max 99999999999"</th>
+    <tr>
+        <th><code>--baseline_prefix</code></th>
+        <th>Prefix of baseline model for use with LDSC, such as <code>ldsc/1000G_Phase3_baseline_v1.1/baseline.</code>, for example. We had to rerun the basline model ourselves rather than use the one provided for download, but it may be different in your case.</th>
+    </tr>
+    <tr>
+        <th><code>--annot_template_prefix</code></th>
+        <th>Prefix for <code>.annot.gz</code> files provided with LD score regression. <code>ldsc/1000G_Phase3_cell_type_groups/cell_type_group.1</code> in our case.</th>
+    </tr>
+    <tr>
+        <th><code>--bfile_prefix</code></th>
+        <th>Prefix for files used in <code>--bfile</code> argument to LD score regression. <code>ldsc/1000G_EUR_Phase3_plink/1000G.EUR.QC</code> in our case.</th>
+    </tr>
+    <tr>
+        <th><code>--hapmap_snps_prefix</code></th>
+        <th>Prefix for files used in <code>--hapmap_snps</code> argument to LD score regression. <code>ldsc/hapmap3_snps/hm</code> in our case.</th>
+    </tr>
+    <tr>
+        <th><code>--ld_score_prefix</code></th>
+        <th>Prefix for <code>--w-ld-chr</code> argument to LD score regression. <code>ldsc/1000G_Phase3_weights_hm3_no_MHC/weights.hm3_noMHC</code> in our case.</th>
+    </tr>
+    <tr>
+        <th><code>--frqfile_prefix</code></th>
+        <th>Prefix for <code>--frqfile-chr</code> argument used with LD score regression. <code>ldsc/1000G_Phase3_frq/1000G.EUR.QC</code> in our case.</th>
+    </tr>
+
+</tbody>
+</table>
+
+<p>As written, the script would output several directories <code>make_template_files</code>, <code>train_models</code>, and <code>score_sumstats</code> that contain files that are inputs or outputs to LD score regression tools. It also contains a file <code>results_gathered.txt</code>, which contains various statistics aggregated from all LD score regression results. See LD score regression documentation for more information on reported statistics.</p>
 
 </div>
 </div>
