@@ -197,7 +197,41 @@ seurat_obj.tsne_clustering = FindClusters(seurat_obj, reduction.type='tsne', sav
     <h2>Differentially Accessible and Specific Peaks </h2>
     <p>In our study we calculate differential accessibility of peaks (see documentation on how this is done on our <a href="http://atlas.gs.washington.edu/fly-atac/docs/#use-case-3-differential-accessibility">Fly ATAC page</a>) against a random set of 2000 cells from the remainder of the dataset to make computation more feasible.</p>
 
-    <p>We also compute specificity scores in a manner very similar to how Monocle can for CellTypeHierarchies. We will post example code for calculating these scores shortly.</p>
+    <h3>Calculating locus-by-cluster specificity scores</h3>
+    <div class= "panel panel-warning">
+        <div class= "panel-heading">
+            <h3 class= "panel-title" data-toc-skip>Performance</h3>
+        </div>
+        <div class= "panel-body">
+            <p>Warning: The current script is not particularly optimized for speed and so running it on the full set of sites and clusters can take a few hours to finish.</p>
+        </div>
+    </div>
+    <p>As mentioned in the manuscript, this analysis relies heavily on the framework first described in <a href="https://www.ncbi.nlm.nih.gov/pubmed/21890647">Cabili et al.</a> and implemented in <a href="http://cole-trapnell-lab.github.io/monocle-release/">Monocle</a> - specificity scores were computed by directly adapting the Monocle code for the <code>calculateMarkerSpecificity()</code> function to our ATAC dataset. We start with a matrix of locus-by-cluster proportions (i.e. how many cells in a cluster have each site accessible). We then normalize this matrix (to account for differences in read depth between different clusters of cells) and then calculate Jensen-Shannon specificity scores on this normalized matrix. Finally, we square the scores and multiple them again by the normalized proportion matrix (to emphasize the sites that are both restricted to a cluster <em>AND</em> fairly common in that cluster. Finally, we try to determine an appropriate cutoff for calling a locus "specific" to a cluster. To do so, we use the list of loci that are not differentially accessible in that cluster as a null distribution for determining a specificity score threshold at which no more than 10% of the called "specific" loci belong to the null class.</p>
+
+    <p>The script provided here requires 3 files as inputs and requires that you specify 4 outputs. The required inputs are: (1) a list (saved in RDS format) of the results from the differential accessibility tests done for each cluster. Each item in the list (1 for each cluster) is a matrix where the rownames are the locus IDs, the first column (<code>beta</code>) contains the "beta" values for the differential accessibility tests, the second column (<code>pval</code>) contains the p values, and the third column (<code>qval</code>) contains the q values. (2) a matrix of proportions representing the fraction of cells each locus is accesible in for each cluster. Each column is a cluster and each row is a locus (column names and row names should be specified). Again this should be saved as an RDS file. And finally (3), a simple text matrix of the median read depths for cells in each cluster. For this matrix, the first column is the cluster name and the second column is the read depth measure. The 4 output file names you will be asked to specify are for a text file of sites that are specific to each cluster (<code>-ST</code>), an rds file for the same information (<code>-SR</code>), a text file for all specificity scores for all clusters by all loci (<code>-AT</code>), and an RDS file for all specificity scores for all clusters by all loci (<code>-AR</code>).
+
+    <p>Below, we present some code to generate the specificity scores we used for the paper:</p>
+
+    <div class= "panel panel-info">
+        <div class= "panel-heading">
+            <h3 class= "panel-title" data-toc-skip>Requirements</h3>
+        </div>
+        <div class= "panel-body">
+            <p>Requires <code>Matrix</code>, <code>limma</code>, <code>reshape2</code>, and <code>argparse</code> to be installed in your R environment.</p>
+        </div>
+    </div>
+
+    <figure class="highlight">
+        <pre><code class="language-bash" data-lang="bash">wget http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/Specificity_Scores/specificity_data.tgz
+        tar -xzf ./specificity_data.tar.gz
+        Rscript specificity_calculator.R -pvals ./specificity_data/peak_pvals_for_vignette.rds -props ./specificity_data/peak_proportions_for_vignette.rds -DP ./specificity_data/peak_depths_for_vignette.txt -ST ./specific_peaks.txt -SR ./specific_peaks.rds -AT ./all_peak_specificity_scores.txt -AR ./all_peak_specificity_scores.rds</code></pre>
+    </figure>
+
+    <p>If you wanted to run this on gene activity scores instead of peak accesibility, the command would be the same, but you would just specify the gene activity files included in tarball instead of the peak accessibility files.</p>
+
+    <figure class="highlight">
+        <pre><code class="language-bash" data-lang="bash">Rscript specificity_calculator.R -pvals ./specificity_data/gene_pvals_for_vignette.rds -props ./specificity_data/gene_proportions_for_vignette.rds -DP ./specificity_data/gene_depths_for_vignette.txt -ST ./specific_genes.txt -SR ./specific_genes.rds -AT ./all_gene_specificity_scores.txt -AR ./all_gene_specificity_scores.rds</code></pre>
+    </figure>
 
     <h2>LD Score Regression</h2>
     <p>In our manuscript we use a tool called LD score regression (LDSC) to compute enrichments for trait heritability within differentially accessible peaks across different cell types.</p>
