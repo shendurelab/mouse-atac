@@ -37,6 +37,19 @@ tags: [worm, manual, vignette, atlas]
 
 <div class="hugespacer"></div>
  -->
+   <h2>Release Updates</h2>
+  <ul>
+    <li><code>08/06/2018</code>:
+      <ul>
+        <li>Switches any references to Colon to LargeIntestine and Intestine to SmallIntestine. This impacts any file that lists a tissue name, but all files were previously consistent with one another and usable.</li>
+        <li>Updates specificity score section including added tutorial input files and minor updates to existing gene-level specificity scores.</li>
+        <li>Adds a section for BAM file downloads.</li>
+      </ul>
+    <li><code>08/02/2018</code>: Initial release.</li>
+  </ul>
+  <div class="hugespacer"></div>
+
+
           <h2>ATAC Matrices</h2>
 
           <p>Similar to sc-RNA-seq, sci-ATAC-seq data is typically analyzed in sparse <code>peak</code> (row) by <code>cell (column)</code> matrices. The first set we provide are binarized counts. The second set has rare peaks filtered out and is then normalized with TFIDF to allow for input to  PCA/TSNE, for example. Note that only cells in our final QC filtered set are included.</p>
@@ -269,8 +282,8 @@ ed.mtx.gz" download>atac_matrix.tfidf.qc_filtered.mtx.gz</a></th>
                 <tr>
                   <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/metadata/cell_metadata.txt" download
                 >cell_metadata.txt</a></th>
-                  <th>08/02/18</th>
-                  <th>13.1MB</th>
+                  <th>08/06/18</th>
+                  <th>13.3MB</th>
                   <th>Metadata for cells in TSV format, including several features such as TSNE coordinates, cluster assignments, and cell type assignments.
                     <a class="btn btn-info btn-xs" data-toggle="collapse" href="#cell-metadata-format" role="button" aria-expanded="false" aria-controls="cell-metadata-format">format details</a>
                     <div class="collapse" id="cell-metadata-format">
@@ -316,7 +329,7 @@ ed.mtx.gz" download>atac_matrix.tfidf.qc_filtered.mtx.gz</a></th>
 
                 <tr>
                   <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/metadata/cell_type_assignments.xlsx" download>cell_type_assignments.xlsx</a></th>
-                  <th>08/02/18</th>
+                  <th>08/06/18</th>
                   <th>134.1KB</th>
                   <th>Excel document with three tabs <code>expected cell types</code>, <code>cell type markers</code>, and <code>Cell type assignments</code> that contain a pairs of tissues and expected cell types, a list of positive markers for each cell type, and the table of cell type assignments with extra details about assignment criteria when applicable, respectively. This is meant to document justification for cell type assignments provided in <code>cell_metadata.txt</code> above.
                       <a class="btn btn-info btn-xs" data-toggle="collapse" href="#marker-sheet-format" role="button" aria-expanded="false" aria-controls="marker-sheet-format">format details</a>
@@ -572,8 +585,8 @@ ed.mtx.gz" download>atac_matrix.tfidf.qc_filtered.mtx.gz</a></th>
   <th>891.0KB</th>
   <th>Same as above in RDS format.</th>
 </tr>
-     
-                
+
+
 <tr>
   <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/Specificity_Scores/specificity_data.tar.gz" download>specificity_data.tar.gz</a></th>
   <th>08/06/2018</th>
@@ -604,7 +617,7 @@ ed.mtx.gz" download>atac_matrix.tfidf.qc_filtered.mtx.gz</a></th>
 
 <tr>
   <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/scrna_seq_comparisons/knn_results.txt" download>knn_results.txt</a></th>
-  <th>08/02/2018</th>
+  <th>08/06/2018</th>
   <th>8.0MB</th>
   <th>KNN results listing assignments of each cell in our study in TSV format. Some cells will be missing and designated as "NA" due to the filtering of very low frequency cell type assignments within each tissue and thresholds on the number of non-zero peaks per cell as described in methods.
     <a class="btn btn-info btn-xs" data-toggle="collapse" href="#knn-format" role="button" aria-expanded="false" aria-controls="knn-format">format details</a>
@@ -624,8 +637,8 @@ ed.mtx.gz" download>atac_matrix.tfidf.qc_filtered.mtx.gz</a></th>
 
 <tr>
   <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/scrna_seq_comparisons/correlation_results.txt" download>correlation_results.txt</a></th>
-  <th>08/02/2018</th>
-  <th>201.5KB</th>
+  <th>08/06/2018</th>
+  <th>201.9KB</th>
   <th>Cluster-level Spearman correlations as a metric of similarity between each of our chromatin profiles and cell type assignments made in each of the same sc-RNA-seq studies in TSV format.
     <a class="btn btn-info btn-xs" data-toggle="collapse" href="#correlation-scrnaseq-format" role="button" aria-expanded="false" aria-controls="correlation-scrnaseq-format">format details</a>
                       <div class="collapse" id="correlation-scrnaseq-format">
@@ -1116,8 +1129,8 @@ distal to describe the combination of proximal and distal status of Peak1 and Pe
 
                 <tr>
                   <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/gwas_h2_enrichments/gwas.tissues.all_results.txt" download>gwas.tissues.all_results.txt</a></th>
-                  <th>08/02/2018</th>
-                  <th>99.5KB</th>
+                  <th>08/06/2018</th>
+                  <th>100.1KB</th>
                   <th>Heritability enrichments for GWAS examined in manuscript (not UKBB) for peaks called from each tissue in TSV format.
                     <a class="btn btn-info btn-xs" data-toggle="collapse" href="#gwas-tissues-format" role="button" aria-expanded="false" aria-controls="gwas-tissues-format">format details</a>
                     <div class="collapse" id="gwas-tissues-format">
@@ -1143,8 +1156,8 @@ distal to describe the combination of proximal and distal status of Peak1 and Pe
 
                 <tr>
                   <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/gwas_h2_enrichments/gwas.tissues.clustered_matrix.txt" download>gwas.tissues.clustered_matrix.txt</a></th>
-                  <th>08/02/2018</th>
-                  <th>9.5KB</th>
+                  <th>08/06/2018</th>
+                  <th>9.6KB</th>
                   <th>A matrix of -log10(qval) for any significant enrichments from above file in TSV format.
                     <a class="btn btn-info btn-xs" data-toggle="collapse" href="#gwas-tissues-matrix-format" role="button" aria-expanded="false" aria-controls="gwas-tissues-matrix-format">format details</a>
                     <div class="collapse" id="gwas-tissues-matrix-format">
@@ -1239,6 +1252,263 @@ distal to describe the combination of proximal and distal status of Peak1 and Pe
                   </th>
                 </tbody>
               </table>
+
+
+          <h2>BAM Files</h2>
+
+          <p>While we provide some raw data on <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE111586">GEO (GSE111586)</a>, we also provide BAM files of the sequences aligned to <code>mm9</code> here in case users would like to use them for their own pipelines or methods development. Below we provide one file per tissue, named by their <code>tissue.replicate</code> ID as specified in the <code>tissue.replicate</code> column of the <code>cell_metadata.txt</code> file in the <a href='#metadata'>metadata section</a> above. This means there will be two files for tissues where we performed a replicate and a single file for all other tissues (in addition to BAM index files).</p>
+
+          <p>Note that each read is assigned to a cell ID (the sequence specified in the <code>cell</code> column of the same metadata file mentioned above). This is encoded in the read name as <code>cellid:otherinfo</code>, so the sequence before the colon is the corrected cell barcode sequence for the read.</p>
+
+          <div class= "panel panel-info">
+            <div class= "panel-heading">
+            <h3 class= "panel-title" data-toc-skip>Important: BAM Cell IDs</h3>
+            </div>
+            <div class= "panel-body">
+              <p>These BAM files have already had cell IDs corrected and the reads are deduplicated.</p>
+
+              <p>There will also be cell IDs in this file that do not appear in our final set of cells. This is because this data contains a superset of what ultimately passes our QC steps.</p>
+            </div>
+          </div>
+
+<table class = "table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Last modified</th>
+      <th>Size</th>
+      <th width = "50%">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/BoneMarrow_62016.bam" download>BoneMarrow_62016.bam</a></th>
+  <th>07/04/2017</th>
+  <th>7.3GB</th>
+  <th>BAM file for BoneMarrow_62016.</th>
+</tr>
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/BoneMarrow_62016.bam.bai" download>BoneMarrow_62016.bam.bai</a></th>
+  <th>07/12/2017</th>
+  <th>2.9MB</th>
+  <th>BAM index for BoneMarrow_62016.</th>
+</tr>
+
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/BoneMarrow_62216.bam" download>BoneMarrow_62216.bam</a></th>
+  <th>07/04/2017</th>
+  <th>6.6GB</th>
+  <th>BAM file for BoneMarrow_62216.</th>
+</tr>
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/BoneMarrow_62216.bam.bai" download>BoneMarrow_62216.bam.bai</a></th>
+  <th>07/12/2017</th>
+  <th>2.5MB</th>
+  <th>BAM index for BoneMarrow_62216.</th>
+</tr>
+
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/Cerebellum_62216.bam" download>Cerebellum_62216.bam</a></th>
+  <th>07/04/2017</th>
+  <th>2.1GB</th>
+  <th>BAM file for Cerebellum_62216.</th>
+</tr>
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/Cerebellum_62216.bam.bai" download>Cerebellum_62216.bam.bai</a></th>
+  <th>07/12/2017</th>
+  <th>2.0MB</th>
+  <th>BAM index for Cerebellum_62216.</th>
+</tr>
+
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/LargeIntestineA_62816.bam" download>LargeIntestineA_62816.bam</a></th>
+  <th>07/04/2017</th>
+  <th>4.8GB</th>
+  <th>BAM file for LargeIntestineA_62816.</th>
+</tr>
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/LargeIntestineA_62816.bam.bai" download>LargeIntestineA_62816.bam.bai</a></th>
+  <th>07/12/2017</th>
+  <th>2.1MB</th>
+  <th>BAM index for LargeIntestineA_62816.</th>
+</tr>
+
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/LargeIntestineB_62816.bam" download>LargeIntestineB_62816.bam</a></th>
+  <th>07/04/2017</th>
+  <th>8.9GB</th>
+  <th>BAM file for LargeIntestineB_62816.</th>
+</tr>
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/LargeIntestineB_62816.bam.bai" download>LargeIntestineB_62816.bam.bai</a></th>
+  <th>07/12/2017</th>
+  <th>3.3MB</th>
+  <th>BAM index for LargeIntestineB_62816.</th>
+</tr>
+
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/HeartA_62816.bam" download>HeartA_62816.bam</a></th>
+  <th>07/04/2017</th>
+  <th>9.9GB</th>
+  <th>BAM file for HeartA_62816.</th>
+</tr>
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/HeartA_62816.bam.bai" download>HeartA_62816.bam.bai</a></th>
+  <th>07/12/2017</th>
+  <th>3.4MB</th>
+  <th>BAM index for HeartA_62816.</th>
+</tr>
+
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/SmallIntestine_62816.bam" download>SmallIntestine_62816.bam</a></th>
+  <th>07/04/2017</th>
+  <th>9.3GB</th>
+  <th>BAM file for SmallIntestine_62816.</th>
+</tr>
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/SmallIntestine_62816.bam.bai" download>SmallIntestine_62816.bam.bai</a></th>
+  <th>07/13/2017</th>
+  <th>3.9MB</th>
+  <th>BAM index for SmallIntestine_62816.</th>
+</tr>
+
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/Kidney_62016.bam" download>Kidney_62016.bam</a></th>
+  <th>07/04/2017</th>
+  <th>8.2GB</th>
+  <th>BAM file for Kidney_62016.</th>
+</tr>
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/Kidney_62016.bam.bai" download>Kidney_62016.bam.bai</a></th>
+  <th>07/13/2017</th>
+  <th>2.9MB</th>
+  <th>BAM index for Kidney_62016.</th>
+</tr>
+
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/Liver_62016.bam" download>Liver_62016.bam</a></th>
+  <th>07/04/2017</th>
+  <th>8.1GB</th>
+  <th>BAM file for Liver_62016.</th>
+</tr>
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/Liver_62016.bam.bai" download>Liver_62016.bam.bai</a></th>
+  <th>07/13/2017</th>
+  <th>2.8MB</th>
+  <th>BAM index for Liver_62016.</th>
+</tr>
+
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/Lung1_62216.bam" download>Lung1_62216.bam</a></th>
+  <th>07/04/2017</th>
+  <th>5.4GB</th>
+  <th>BAM file for Lung1_62216.</th>
+</tr>
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/Lung1_62216.bam.bai" download>Lung1_62216.bam.bai</a></th>
+  <th>07/13/2017</th>
+  <th>2.4MB</th>
+  <th>BAM index for Lung1_62216.</th>
+</tr>
+
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/Lung2_62216.bam" download>Lung2_62216.bam</a></th>
+  <th>07/04/2017</th>
+  <th>6.3GB</th>
+  <th>BAM file for Lung2_62216.</th>
+</tr>
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/Lung2_62216.bam.bai" download>Lung2_62216.bam.bai</a></th>
+  <th>07/13/2017</th>
+  <th>2.4MB</th>
+  <th>BAM index for Lung2_62216.</th>
+</tr>
+
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/PreFrontalCortex_62216.bam" download>PreFrontalCortex_62216.bam</a></th>
+  <th>07/04/2017</th>
+  <th>11.1GB</th>
+  <th>BAM file for PreFrontalCortex_62216.</th>
+</tr>
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/PreFrontalCortex_62216.bam.bai" download>PreFrontalCortex_62216.bam.bai</a></th>
+  <th>07/13/2017</th>
+  <th>4.0MB</th>
+  <th>BAM index for PreFrontalCortex_62216.</th>
+</tr>
+
+ <tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/Spleen_62016.bam" download>Spleen_62016.bam</a></th>
+  <th>07/04/2017</th>
+  <th>5.0GB</th>
+  <th>BAM file for Spleen_62016.</th>
+</tr>
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/Spleen_62016.bam.bai" download>Spleen_62016.bam.bai</a></th>
+  <th>07/13/2017</th>
+  <th>2.5MB</th>
+  <th>BAM index for Spleen_62016.</th>
+</tr>
+
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/Testes_62016.bam" download>Testes_62016.bam</a></th>
+  <th>07/04/2017</th>
+  <th>12.5GB</th>
+  <th>BAM file for Testes_62016.</th>
+</tr>
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/Testes_62016.bam.bai" download>Testes_62016.bam.bai</a></th>
+  <th>07/13/2017</th>
+  <th>5.7MB</th>
+  <th>BAM index for Testes_62016.</th>
+</tr>
+
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/Thymus_62016.bam" download>Thymus_62016.bam</a></th>
+  <th>07/04/2017</th>
+  <th>10.2GB</th>
+  <th>BAM file for Thymus_62016.</th>
+</tr>
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/Thymus_62016.bam.bai" download>Thymus_62016.bam.bai</a></th>
+  <th>07/13/2017</th>
+  <th>3.4MB</th>
+  <th>BAM index for Thymus_62016.</th>
+</tr>
+
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/WholeBrainA_62216.bam" download>
+WholeBrainA_62216.bam</a></th>
+  <th>07/04/2017</th>
+  <th>8.9GB</th>
+  <th>BAM file for WholeBrainA_62216.</th>
+</tr>
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/WholeBrainA_62216.bam.bai" download>WholeBrainA_62216.bam.bai</a></th>
+  <th>07/13/2017</th>
+  <th>3.4MB</th>
+  <th>BAM index for WholeBrainA_62216.</th>
+</tr>
+
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/WholeBrainA_62816.bam" download>
+WholeBrainA_62816.bam</a></th>
+  <th>07/04/2017</th>
+  <th>6.4GB</th>
+  <th>BAM file for WholeBrainA_62816.</th>
+</tr>
+<tr>
+  <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/WholeBrainA_62816.bam.bai" download>WholeBrainA_62816.bam.bai</a></th>
+  <th>07/13/2017</th>
+  <th>2.7MB</th>
+  <th>BAM index for WholeBrainA_62816.</th>
+</tr>
+
+
+    </tbody>
+  </table>
+
 
 </div>
 
