@@ -1258,16 +1258,22 @@ distal to describe the combination of proximal and distal status of Peak1 and Pe
 
           <p>While we provide some raw data on <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE111586">GEO (GSE111586)</a>, we also provide BAM files of the sequences aligned to <code>mm9</code> here in case users would like to use them for their own pipelines or methods development. Below we provide one file per tissue, named by their <code>tissue.replicate</code> ID as specified in the <code>tissue.replicate</code> column of the <code>cell_metadata.txt</code> file in the <a href='#metadata'>metadata section</a> above. This means there will be two files for tissues where we performed a replicate and a single file for all other tissues (in addition to BAM index files).</p>
 
-          <p>Note that each read is assigned to a cell ID (the sequence specified in the <code>cell</code> column of the same metadata file mentioned above). This is encoded in the read name as <code>cellid:otherinfo</code>, so the sequence before the colon is the corrected cell barcode sequence for the read.</p>
-
           <div class= "panel panel-info">
             <div class= "panel-heading">
-            <h3 class= "panel-title" data-toc-skip>Important: BAM Cell IDs</h3>
+            <h3 class= "panel-title" data-toc-skip>Important BAM Details</h3>
             </div>
             <div class= "panel-body">
-              <p>These BAM files have already had cell IDs corrected and the reads are deduplicated.</p>
+              <ul>
+                <li>Each read is assigned to a cell ID (the sequence specified in the <code>cell</code> column of the same metadata file mentioned above). This is encoded in the read name as <code>cellid:otherinfo</code>, so the sequence before the colon is the corrected cell barcode sequence for the read.</li>
 
-              <p>There will also be cell IDs in this file that do not appear in our final set of cells. This is because this data contains a superset of what ultimately passes our QC steps.</p>
+                <li>Reads are already deduplicated.</li>
+
+                <li>There will be cell IDs that do not appear in our final set of cells, as data is a superset of what ultimately passes our QC steps.</li>
+
+                <li>Files may not download correctly in Chrome (and other web browsers), but they can easily be downloaded with <code>wget</code> or <code>curl</code>, by right clicking and copying the link address. For example:</li>
+
+                <pre><code class="language-bash" data-lang="bash">wget http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bams/BoneMarrow_62016.bam</code></pre>
+              </ul>
             </div>
           </div>
 
