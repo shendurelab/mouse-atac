@@ -22,7 +22,7 @@ make_seurat = function(atac_matrix, metadata=NULL, pca_coords=NULL, tsne_coords=
 	       if (!is.null(tsne_coords)) {
 			tsne_coords = as.matrix(tsne_coords)
                         seurat_obj = CreateSeuratObject(atac_matrix, meta.data=metadata, project='DEFAULT', min.cells=0, min.genes=0)
-                        seurat_obj <- SetDimReduction(object = seurat_obj, reduction.type = "pca", slot = "cell.embeddings", new.data = tsne_coords)
+                        seurat_obj <- SetDimReduction(object = seurat_obj, reduction.type = "tsne", slot = "cell.embeddings", new.data = tsne_coords)
                         seurat_obj <- SetDimReduction(object = seurat_obj, reduction.type = "tsne", slot = "key", new.data = "tsne")
 	       }
 
