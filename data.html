@@ -40,7 +40,7 @@ tags: [worm, manual, vignette, atlas]
    <h2>Release Updates</h2>
   <ul>
     <li><code>08/14/2018</code> adds <code>UCSC Trackhub and BigWigs</code> section which provides documentation on new bigWig files and a UCSC Trackhub for visualization.</li>
-    <li><code>08/10/2018</code> adds another metadata file option, <code>cell_metadata.tissue_freq_filtered.txt</code>, which removes cells annotated with <code>cell_label</code> entries within tissues where they account for less than 0.5% of the cells. These very low frequency labels are often not cell types expected their respective tissues and could be due to slight imperfections in clustering, for example.</li>
+    <li><code>08/10/2018</code> adds another metadata file option, <code>cell_metadata.tissue_freq_filtered.txt</code>, which removes cells in each tissue belonging to a <code>cell_label</code> that accounts for less than 0.5% of the cells in that tissue. These very low frequency labels are often not cell types expected their respective tissues and could be due to slight imperfections in clustering, for example.</li>
     <li><code>08/06/2018</code>:
       <ul>
         <li>Switches any references to Colon to LargeIntestine and Intestine to SmallIntestine. This impacts any file that lists a tissue name, but all files were previously consistent with one another and usable.</li>
@@ -311,7 +311,7 @@ ed.mtx.gz" download>atac_matrix.tfidf.qc_filtered.mtx.gz</a></th>
                 >cell_metadata.tissue_freq_filtered.txt</a></th>
                   <th>08/10/18</th>
                   <th>13.0MB</th>
-                  <th>Same as <code>cell_metadata.txt</code>, but removes cells annotated with <code>cell_label</code> entries within tissues where they account for less than 0.5% of the cells. These very low frequency labels are often not cell types expected their respective tissues and could be due to slight imperfections in clustering, for example. Provided matrices would need to be subsetted to match this set of cells if using.</th>
+                  <th>Same as <code>cell_metadata.txt</code>, but removes cells in each tissue belonging to a <code>cell_label</code> that accounts for less than 0.5% of the cells in that tissue. These very low frequency labels are often not cell types expected their respective tissues and could be due to slight imperfections in clustering, for example. Provided matrices would need to be subsetted to match this set of cells if using this metadata.</th>
                 </tr>
                 <tr>
                   <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/metadata/peak_promoter_intersections.txt" download>peak_promoter_intersections.txt</a></th>
