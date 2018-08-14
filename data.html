@@ -39,7 +39,7 @@ tags: [worm, manual, vignette, atlas]
  -->
    <h2>Release Updates</h2>
   <ul>
-    <li><code>08/14/2018</code> adds <code>UCSC Trackhub and BigWigs</code> section which provides documentation on new bigWig files and a UCSC Trackhub we set up to display them for you.</li>
+    <li><code>08/14/2018</code> adds <code>UCSC Trackhub and BigWigs</code> section which provides documentation on new bigWig files and a UCSC Trackhub for visualization.</li>
     <li><code>08/10/2018</code> adds another metadata file option, <code>cell_metadata.tissue_freq_filtered.txt</code>, which removes cells annotated with <code>cell_label</code> entries within tissues where they account for less than 0.5% of the cells. These very low frequency labels are often not cell types expected their respective tissues and could be due to slight imperfections in clustering, for example.</li>
     <li><code>08/06/2018</code>:
       <ul>
@@ -1528,7 +1528,7 @@ WholeBrainA_62816.bam</a></th>
   <div class="hugespacer"></div>
 
   <h2>UCSC Trackhub and Bigwigs</h2>
-  <p>We also provide bigWig files and a UCSC trackhub to visualize aggregated pseudo-bulk ATAC-seq profiles for the cells from each cluster. Note that for the smallest clusters, the data will still be fairly sparse even in aggregate. In general, we prefer methods for assessing differential accessibility or specificity computationally over visual inspection, although viewing tracks is often useful to get a sense for the data at a given locus.</p>
+  <p>We also provide bigWig files and a UCSC trackhub to visualize aggregated pseudo-bulk ATAC-seq profiles for the cells from each cluster. Note that for the smallest clusters, the data will appear fairly sparse even in aggregate at any single locus. In general, we prefer methods for assessing differential accessibility or specificity computationally over visual inspection, although viewing tracks is often useful to get a sense for the data at a given locus.</p>
 
   <h3>UCSC Trackhub</h3>
   <p>You may access our <a href='http://genome.ucsc.edu/cgi-bin/hgTracks?db=mm9&hubUrl=http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/trackhub/hub.txt'>UCSC trackhub here</a>. By default the hub will contain a track at the top called  <code>_All_Peak_Calls</code>, which annotates regions that we called within LSI clusters for each tissue (see Methods). These peaks were used as our features for all downstream analysis.</p>
@@ -1541,7 +1541,7 @@ WholeBrainA_62816.bam</a></th>
   </div>
     <div class= "panel-body">
 
-    <p>We have generated these tracks using <a href='https://deeptools.readthedocs.io/en/develop/'>DeepTools3</a> and <code>CPM</code> or <code>Counts Per Million</code> normalization. The default range displayed on UCSC is 0 to 4 for all tracks, which we find generally works well. However, it is possible that it may need to be adjusted in some cases.</p>
+    <p>We have generated these tracks using <a href='https://deeptools.readthedocs.io/en/develop/'>DeepTools3</a> and <code>CPM</code> or <code>Counts Per Million</code> normalization with a <code>1bp window size</code>. The default range displayed on UCSC is 0 to 4 for all tracks, which we find generally works well. However, it is possible that it may need to be adjusted in some cases.</p>
     </div>
   </div>
 
