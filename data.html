@@ -39,12 +39,13 @@ tags: [worm, manual, vignette, atlas]
  -->
    <h2>Release Updates</h2>
   <ul>
+    <li><code>08/14/2018</code> adds <code>UCSC Trackhub and BigWigs</code> section which provides documentation on new bigWig files and a UCSC Trackhub we set up to display them for you.</li>
     <li><code>08/10/2018</code> adds another metadata file option, <code>cell_metadata.tissue_freq_filtered.txt</code>, which removes cells annotated with <code>cell_label</code> entries within tissues where they account for less than 0.5% of the cells. These very low frequency labels are often not cell types expected their respective tissues and could be due to slight imperfections in clustering, for example.</li>
     <li><code>08/06/2018</code>:
       <ul>
         <li>Switches any references to Colon to LargeIntestine and Intestine to SmallIntestine. This impacts any file that lists a tissue name, but all files were previously consistent with one another and usable.</li>
         <li>Updates specificity score section including added tutorial input files and minor updates to existing gene-level specificity scores.</li>
-        <li>Adds a section for BAM file downloads.</li>
+        <li>Adds a <code>BAM Files</code> for BAM downloads.</li>
       </ul>
     <li><code>08/02/2018</code>: Initial release.</li>
   </ul>
@@ -1266,9 +1267,9 @@ distal to describe the combination of proximal and distal status of Peak1 and Pe
 
           <p>While we provide some raw data on <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE111586">GEO (GSE111586)</a>, we also provide BAM files of the sequences aligned to <code>mm9</code> here in case users would like to use them for their own pipelines or methods development. Below we provide one file per tissue, named by their <code>tissue.replicate</code> ID as specified in the <code>tissue.replicate</code> column of the <code>cell_metadata.txt</code> file in the <a href='#metadata'>metadata section</a> above. This means there will be two files for tissues where we performed a replicate and a single file for all other tissues (in addition to BAM index files).</p>
 
-          <div class= "panel panel-info">
+          <div class= "panel panel-warning">
             <div class= "panel-heading">
-            <h3 class= "panel-title" data-toc-skip>Important BAM Details</h3>
+            <h3 class= "panel-title" data-toc-skip>Important: BAM Details</h3>
             </div>
             <div class= "panel-body">
               <ul>
@@ -1523,6 +1524,648 @@ WholeBrainA_62816.bam</a></th>
     </tbody>
   </table>
 
+
+  <div class="hugespacer"></div>
+
+  <h2>UCSC Trackhub and Bigwigs</h2>
+  <p>We also provide bigWig files and a UCSC trackhub to visualize aggregated pseudo-bulk ATAC-seq profiles for the cells from each cluster. Note that for the smallest clusters, the data will still be fairly sparse even in aggregate. In general, we prefer methods for assessing differential accessibility or specificity computationally over visual inspection, although viewing tracks is often useful to get a sense for the data at a given locus.</p>
+
+  <h3>UCSC Trackhub</h3>
+  <p>You may access our <a href='http://genome.ucsc.edu/cgi-bin/hgTracks?db=mm9&hubUrl=http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/trackhub/hub.txt'>UCSC trackhub here</a>. By default the hub will contain a track at the top called  <code>_All_Peak_Calls</code>, which annotates regions that we called within LSI clusters for each tissue (see Methods). These peaks were used as our features for all downstream analysis.</p>
+
+  <p>The trackhub will also contain a track for each cluster in the dataset named according to the convention <code>cell_label-id</code>, where <code>cell_label</code> and <code>id</code> are defined in the same way as they are in our <code>cell_metadata.txt</code> file <a href='#metadata'>above</a>. Spaces and periods in cell labels have been removed or replaced as necessary.</p>
+
+   <div class= "panel panel-warning">
+    <div class= "panel-heading">
+    <h3 class= "panel-title" data-toc-skip>Important</h3>
+  </div>
+    <div class= "panel-body">
+
+    <p>We have generated these tracks using <a href='https://deeptools.readthedocs.io/en/develop/'>DeepTools3</a> and <code>CPM</code> or <code>Counts Per Million</code> normalization. The default range displayed on UCSC is 0 to 4 for all tracks, which we find generally works well. However, it is possible that it may need to be adjusted in some cases.</p>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <h3>BigWig Files</h3>
+  <p>In case you would like access to the files used to make the trackhub above, we provide them for download below. Each file is named in the same manner as described above with a <code>.bw</code> or <code>.bb</code> extension.</p>
+
+<table class = "table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Last modified</th>
+      <th>Size</th>
+      <th width="50%">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/master_peaks_track.bb" download>master_peaks_track.bb</a></th>
+      <th>08/14/2018</th>
+      <th>3.9MB</th>
+      <th>bigBed formatted file with our master set of peak calls.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Activated_B_cells-clusters_4-cluster_4.bw" download>Activated_B_cells-clusters_4-cluster_4.bw</a></th>
+      <th>08/14/2018</th>
+      <th>77.4MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Alveolar_macrophages-clusters_17-cluster_2.bw" download>Alveolar_macrophages-clusters_17-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>166.7MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Astrocytes-clusters_19-cluster_1.bw" download>Astrocytes-clusters_19-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>144.0MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Astrocytes-clusters_19-cluster_2.bw" download>Astrocytes-clusters_19-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>69.2MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Astrocytes-clusters_19-cluster_3.bw" download>Astrocytes-clusters_19-cluster_3.bw</a></th>
+      <th>08/14/2018</th>
+      <th>32.4MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Astrocytes-clusters_19-cluster_4.bw" download>Astrocytes-clusters_19-cluster_4.bw</a></th>
+      <th>08/14/2018</th>
+      <th>29.5MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/B_cells-clusters_16-cluster_1.bw" download>B_cells-clusters_16-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>323.2MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/B_cells-clusters_4-cluster_1.bw" download>B_cells-clusters_4-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>168.2MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/B_cells-clusters_4-cluster_2.bw" download>B_cells-clusters_4-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>178.3MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/B_cells-clusters_4-cluster_3.bw" download>B_cells-clusters_4-cluster_3.bw</a></th>
+      <th>08/14/2018</th>
+      <th>350.2MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Cardiomyocytes-clusters_7-cluster_1.bw" download>Cardiomyocytes-clusters_7-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>960.2MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Cerebellar_granule_cells-clusters_8-cluster_1.bw" download>Cerebellar_granule_cells-clusters_8-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>331.5MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Cerebellar_granule_cells-clusters_8-cluster_2.bw" download>Cerebellar_granule_cells-clusters_8-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>245.5MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Collecting_duct-clusters_18-cluster_5.bw" download>Collecting_duct-clusters_18-cluster_5.bw</a></th>
+      <th>08/14/2018</th>
+      <th>42.5MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Collisions-clusters_17-cluster_4.bw" download>Collisions-clusters_17-cluster_4.bw</a></th>
+      <th>08/14/2018</th>
+      <th>45.8MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Collisions-clusters_17-cluster_5.bw" download>Collisions-clusters_17-cluster_5.bw</a></th>
+      <th>08/14/2018</th>
+      <th>82.0MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Collisions-clusters_26-cluster_2.bw" download>Collisions-clusters_26-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>56.3MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Collisions-clusters_26-cluster_3.bw" download>Collisions-clusters_26-cluster_3.bw</a></th>
+      <th>08/14/2018</th>
+      <th>100.5MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Collisions-clusters_27-cluster_2.bw" download>Collisions-clusters_27-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>176.9MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Collisions-clusters_27-cluster_3.bw" download>Collisions-clusters_27-cluster_3.bw</a></th>
+      <th>08/14/2018</th>
+      <th>56.0MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Collisions-clusters_30-cluster_3.bw" download>Collisions-clusters_30-cluster_3.bw</a></th>
+      <th>08/14/2018</th>
+      <th>19.2MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/DCT_CD-clusters_18-cluster_1.bw" download>DCT_CD-clusters_18-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>138.0MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Dendritic_cells-clusters_17-cluster_1.bw" download>Dendritic_cells-clusters_17-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>101.6MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Dendritic_cells-clusters_17-cluster_3.bw" download>Dendritic_cells-clusters_17-cluster_3.bw</a></th>
+      <th>08/14/2018</th>
+      <th>123.7MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Distal_convoluted_tubule-clusters_18-cluster_4.bw" download>Distal_convoluted_tubule-clusters_18-cluster_4.bw</a></th>
+      <th>08/14/2018</th>
+      <th>90.0MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Endothelial_II_cells-clusters_23-cluster_1.bw" download>Endothelial_II_cells-clusters_23-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>282.6MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Endothelial_II_cells-clusters_25-cluster_2.bw" download>Endothelial_II_cells-clusters_25-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>50.0MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Endothelial_II_cells-clusters_25-cluster_3.bw" download>Endothelial_II_cells-clusters_25-cluster_3.bw</a></th>
+      <th>08/14/2018</th>
+      <th>14.2MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Endothelial_II_cells-clusters_9-cluster_2.bw" download>Endothelial_II_cells-clusters_9-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>168.3MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Endothelial_II_cells-clusters_9-cluster_3.bw" download>Endothelial_II_cells-clusters_9-cluster_3.bw</a></th>
+      <th>08/14/2018</th>
+      <th>45.5MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Endothelial_I_(glomerular)-clusters_22-cluster_2.bw" download>Endothelial_I_(glomerular)-clusters_22-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>67.7MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Endothelial_I_cells-clusters_22-cluster_1.bw" download>Endothelial_I_cells-clusters_22-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>83.4MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Endothelial_I_cells-clusters_22-cluster_3.bw" download>Endothelial_I_cells-clusters_22-cluster_3.bw</a></th>
+      <th>08/14/2018</th>
+      <th>21.8MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Endothelial_I_cells-clusters_22-cluster_4.bw" download>Endothelial_I_cells-clusters_22-cluster_4.bw</a></th>
+      <th>08/14/2018</th>
+      <th>20.5MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Enterocytes-clusters_6-cluster_1.bw" download>Enterocytes-clusters_6-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>1.2GB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Erythroblasts-clusters_13-cluster_1.bw" download>Erythroblasts-clusters_13-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>483.1MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Ex_neurons_CPN-clusters_5-cluster_1.bw" download>Ex_neurons_CPN-clusters_5-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>736.2MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Ex_neurons_CThPN-clusters_5-cluster_3.bw" download>Ex_neurons_CThPN-clusters_5-cluster_3.bw</a></th>
+      <th>08/14/2018</th>
+      <th>405.7MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Ex_neurons_CThPN-clusters_5-cluster_4.bw" download>Ex_neurons_CThPN-clusters_5-cluster_4.bw</a></th>
+      <th>08/14/2018</th>
+      <th>441.8MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Ex_neurons_SCPN-clusters_29-cluster_1.bw" download>Ex_neurons_SCPN-clusters_29-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>108.3MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Ex_neurons_SCPN-clusters_5-cluster_2.bw" download>Ex_neurons_SCPN-clusters_5-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>609.6MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Hematopoietic_progenitors-clusters_10-cluster_1.bw" download>Hematopoietic_progenitors-clusters_10-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>1.1GB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Hepatocytes-clusters_3-cluster_1.bw" download>Hepatocytes-clusters_3-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>1.1GB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Immature_B_cells-clusters_28-cluster_1.bw" download>Immature_B_cells-clusters_28-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>41.3MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Immature_B_cells-clusters_28-cluster_2.bw" download>Immature_B_cells-clusters_28-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>58.7MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Inhibitory_neurons-clusters_15-cluster_1.bw" download>Inhibitory_neurons-clusters_15-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>585.5MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Inhibitory_neurons-clusters_15-cluster_2.bw" download>Inhibitory_neurons-clusters_15-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>227.5MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Inhibitory_neurons-clusters_5-cluster_5.bw" download>Inhibitory_neurons-clusters_5-cluster_5.bw</a></th>
+      <th>08/14/2018</th>
+      <th>156.9MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Loop_of_henle-clusters_18-cluster_2.bw" download>Loop_of_henle-clusters_18-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>126.0MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Loop_of_henle-clusters_18-cluster_3.bw" download>Loop_of_henle-clusters_18-cluster_3.bw</a></th>
+      <th>08/14/2018</th>
+      <th>69.8MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Macrophages-clusters_16-cluster_2.bw" download>Macrophages-clusters_16-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>181.5MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Microglia-clusters_16-cluster_3.bw" download>Microglia-clusters_16-cluster_3.bw</a></th>
+      <th>08/14/2018</th>
+      <th>81.1MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Monocytes-clusters_24-cluster_1.bw" download>Monocytes-clusters_24-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>132.3MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Monocytes-clusters_24-cluster_2.bw" download>Monocytes-clusters_24-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>151.4MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/NK_cells-clusters_12-cluster_3.bw" download>NK_cells-clusters_12-cluster_3.bw</a></th>
+      <th>08/14/2018</th>
+      <th>63.8MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Oligodendrocytes-clusters_21-cluster_1.bw" download>Oligodendrocytes-clusters_21-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>124.0MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Oligodendrocytes-clusters_21-cluster_2.bw" download>Oligodendrocytes-clusters_21-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>84.1MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Podocytes-clusters_25-cluster_1.bw" download>Podocytes-clusters_25-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>89.2MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Proximal_tubule-clusters_11-cluster_1.bw" download>Proximal_tubule-clusters_11-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>137.2MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Proximal_tubule-clusters_11-cluster_2.bw" download>Proximal_tubule-clusters_11-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>222.5MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Proximal_tubule-clusters_11-cluster_3.bw" download>Proximal_tubule-clusters_11-cluster_3.bw</a></th>
+      <th>08/14/2018</th>
+      <th>168.0MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Proximal_tubule-clusters_11-cluster_5.bw" download>Proximal_tubule-clusters_11-cluster_5.bw</a></th>
+      <th>08/14/2018</th>
+      <th>192.6MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Proximal_tubule_S3-clusters_11-cluster_4.bw" download>Proximal_tubule_S3-clusters_11-cluster_4.bw</a></th>
+      <th>08/14/2018</th>
+      <th>252.0MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Purkinje_cells-clusters_27-cluster_1.bw" download>Purkinje_cells-clusters_27-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>95.1MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Regulatory_T_cells-clusters_12-cluster_2.bw" download>Regulatory_T_cells-clusters_12-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>101.2MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/SOM+_Interneurons-clusters_15-cluster_3.bw" download>SOM+_Interneurons-clusters_15-cluster_3.bw</a></th>
+      <th>08/14/2018</th>
+      <th>222.1MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Sperm-clusters_14-cluster_1.bw" download>Sperm-clusters_14-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>274.3MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Sperm-clusters_14-cluster_2.bw" download>Sperm-clusters_14-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>137.4MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Sperm-clusters_14-cluster_3.bw" download>Sperm-clusters_14-cluster_3.bw</a></th>
+      <th>08/14/2018</th>
+      <th>140.9MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/T_cells-clusters_12-cluster_1.bw" download>T_cells-clusters_12-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>285.0MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/T_cells-clusters_12-cluster_4.bw" download>T_cells-clusters_12-cluster_4.bw</a></th>
+      <th>08/14/2018</th>
+      <th>90.2MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/T_cells-clusters_12-cluster_5.bw" download>T_cells-clusters_12-cluster_5.bw</a></th>
+      <th>08/14/2018</th>
+      <th>27.0MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/T_cells-clusters_2-cluster_1.bw" download>T_cells-clusters_2-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>1.1GB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/T_cells-clusters_26-cluster_1.bw" download>T_cells-clusters_26-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>78.0MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Type_II_pneumocytes-clusters_30-cluster_1.bw" download>Type_II_pneumocytes-clusters_30-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>37.0MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Type_I_pneumocytes-clusters_20-cluster_1.bw" download>Type_I_pneumocytes-clusters_20-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>282.6MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Unknown-clusters_1-cluster_1.bw" download>Unknown-clusters_1-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>1.3GB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Unknown-clusters_1-cluster_2.bw" download>Unknown-clusters_1-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>598.2MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Unknown-clusters_1-cluster_3.bw" download>Unknown-clusters_1-cluster_3.bw</a></th>
+      <th>08/14/2018</th>
+      <th>369.5MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Unknown-clusters_23-cluster_2.bw" download>Unknown-clusters_23-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>40.8MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Unknown-clusters_30-cluster_2.bw" download>Unknown-clusters_30-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>66.9MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Unknown-clusters_30-cluster_4.bw" download>Unknown-clusters_30-cluster_4.bw</a></th>
+      <th>08/14/2018</th>
+      <th>16.9MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Unknown-clusters_5-cluster_6.bw" download>Unknown-clusters_5-cluster_6.bw</a></th>
+      <th>08/14/2018</th>
+      <th>102.6MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Unknown-clusters_7-cluster_2.bw" download>Unknown-clusters_7-cluster_2.bw</a></th>
+      <th>08/14/2018</th>
+      <th>45.2MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+    <tr>
+      <th><a href = "http://krishna.gs.washington.edu/content/members/ajh24/mouse_atlas_data_release/bigwigs/Unknown-clusters_9-cluster_1.bw" download>Unknown-clusters_9-cluster_1.bw</a></th>
+      <th>08/14/2018</th>
+      <th>613.1MB</th>
+      <th>bigWig formated track for cluster.</th>
+    </tr>
+
+
+  </tbody>
+</table>
 
 </div>
 
