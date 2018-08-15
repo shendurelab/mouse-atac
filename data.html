@@ -1541,7 +1541,7 @@ WholeBrainA_62816.bam</a></th>
   </div>
     <div class= "panel-body">
 
-    <p>We have generated these tracks using <a href='https://deeptools.readthedocs.io/en/develop/'>DeepTools3</a> and <code>CPM</code> or <code>Counts Per Million</code> normalization with a <code>1bp window size</code>. The default range displayed on UCSC is 0 to 4 for all tracks, which we find generally works well. However, it is possible that it may need to be adjusted in some cases.</p>
+    <p>We have generated these tracks using <a href='https://deeptools.readthedocs.io/en/develop/'>DeepTools3</a> and <code>CPM</code> or <code>Counts Per Million</code> normalization with using the <code>bamCoverage</code> command with arguments <code>-bs 1 --normalizeUsing CPM --skipNAs</code>. The default range displayed on UCSC is 0 to 4 for all tracks, which we find generally works well. However, it is possible that it may need to be adjusted in some cases.</p>
     </div>
   </div>
 
