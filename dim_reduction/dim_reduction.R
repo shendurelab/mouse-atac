@@ -9,8 +9,8 @@ atac_dim_reduction = function(atac_matrix, site_frequency_threshold=0.03) {
                ncounts = atac_matrix[num_cells_ncounted >= threshold,]
 
                ## Normalize the data with TF-IDF
-               nfreqs = t(t(ncounts) / colSums(ncounts))
-               tf_idf_counts = nfreqs * log(1 + ncol(ncounts) / rowSums(ncounts))
+               nfreqs = t(t(ncounts) / Matrix::colSums(ncounts))
+               tf_idf_counts = nfreqs * log(1 + ncol(ncounts) / Matrix::rowSums(ncounts))
 
                ## Do SVD
                set.seed(0)
