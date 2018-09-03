@@ -24,7 +24,7 @@ get_banding_score = function(cell_subset) {
 
 	banding_score = sum(periodogram$spec[periodogram$freq >= 100 & periodogram$freq <= 300])
 
-	return(data.frame("cell"=cell_subset[1, "cell"], "banding_score"=nucleosome_score))
+	return(data.frame("cell"=cell_subset[1, "cell"], "banding_score"=banding_score))
 }
 
 # Read data
