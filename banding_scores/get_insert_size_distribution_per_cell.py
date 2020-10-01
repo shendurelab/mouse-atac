@@ -3,7 +3,7 @@ import argparse
 import collections
 
 if __name__ == '__main__':
-	parser = argparse.ArgumentParser('Script to get insert size and total count per cell distributions per cell in long format.')
+	parser = argparse.ArgumentParser('Script to get insert size and total count per cell distribution in long format.')
 	parser.add_argument('bam_file', help='BAM file with reads for each cell. Read names must be in the format "cellname:other_text" in order to allow cell IDs to be extracted.')
 	parser.add_argument('output_file', help='Output file with insert size histograms for each cell.')
 	parser.add_argument('--barcodes', help='Input file containing one cell ID per line. Only cell IDs included in this barcode list will be included in output files.')
